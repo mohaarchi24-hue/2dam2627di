@@ -1,1 +1,859 @@
+<!DOCTYPE html>
 
+<html lang="es">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>25:00 - Concentración | FocusFlow Pomodoro</title>
+<!-- Tailwind CSS CDN -->
+<script src="https://cdn.tailwindcss.com"></script>
+<!-- Lucide Icons -->
+<script src="https://unpkg.com/lucide@latest"></script>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
+<script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            focus: {
+              accent: '#10b981',
+              glow: 'rgba(16, 185, 129, 0.35)',
+              light: '#34d399',
+              dark: '#064e3b'
+            },
+            shortBreak: {
+              accent: '#38bdf8',
+              glow: 'rgba(56, 189, 248, 0.35)',
+              light: '#7dd3fc',
+              dark: '#0c4a6e'
+            },
+            longBreak: {
+              accent: '#c084fc',
+              glow: 'rgba(192, 132, 252, 0.35)',
+              light: '#d8b4fe',
+              dark: '#581c87'
+            }
+          }
+        }
+      }
+    }
+  </script>
+<style>
+    :root {
+      --current-accent: #10b981;
+      --current-accent-glow: rgba(16, 185, 129, 0.35);
+      --current-accent-light: #34d399;
+      --current-accent-subtle: rgba(16, 185, 129, 0.12);
+    }
+
+    body {
+      transition: background-color 0.8s ease, color 0.5s ease;
+    }
+
+    .theme-transition {
+      transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    .glass-panel {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4), inset 0 1px 1px rgba(255, 255, 255, 0.15);
+    }
+
+    .glass-card {
+      background: rgba(255, 255, 255, 0.04);
+      backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.07);
+    }
+
+    .timer-ring-bg {
+      stroke: rgba(255, 255, 255, 0.06);
+    }
+
+    .timer-ring-progress {
+      stroke: var(--current-accent);
+      filter: drop-shadow(0 0 12px var(--current-accent-glow));
+      transition: stroke-dashoffset 0.85s linear, stroke 0.6s ease, filter 0.6s ease;
+    }
+
+    .accent-btn-active {
+      background-color: var(--current-accent);
+      color: #050b14;
+      box-shadow: 0 0 24px var(--current-accent-glow);
+    }
+
+    .accent-text {
+      color: var(--current-accent);
+      transition: color 0.5s ease;
+    }
+
+    .accent-border {
+      border-color: var(--current-accent);
+    }
+
+    /* Modal Animation */
+    .modal-enter {
+      animation: modalFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+    }
+    @keyframes modalFadeIn {
+      from { opacity: 0; transform: scale(0.95) translateY(10px); }
+      to { opacity: 1; transform: scale(1) translateY(0); }
+    }
+
+    /* Custom range input */
+    input[type=range] {
+      accent-color: var(--current-accent);
+    }
+
+    /* Subtle pulse animation for active timer */
+    @keyframes subtlePulse {
+      0%, 100% { opacity: 0.9; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.015); }
+    }
+    .timer-running-pulse {
+      animation: subtlePulse 3s ease-in-out infinite;
+    }
+  </style>
+</head>
+<body class="min-h-screen text-slate-100 flex flex-col items-center justify-between relative overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
+<!-- Background Wallpaper with Overlay and Ambient Vignette -->
+<div class="fixed inset-0 -z-20 bg-cover bg-center transition-all duration-1000 transform scale-105" style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg');">
+</div>
+<!-- Deep Dark Multi-Layer Gradient Overlays -->
+<div class="fixed inset-0 -z-10 bg-slate-950/80 backdrop-blur-[6px] transition-colors duration-700"></div>
+<div class="fixed inset-0 -z-10 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
+<div class="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full blur-[130px] opacity-25 pointer-events-none theme-transition" id="ambient-glow" style="background-color: var(--current-accent);"></div>
+<!-- Top Navigation Header -->
+<header class="w-full max-w-5xl px-6 py-5 flex items-center justify-between z-10">
+<div class="flex items-center gap-3">
+<div class="w-10 h-10 rounded-xl glass-card flex items-center justify-center border border-white/15 text-emerald-400 shadow-lg shadow-emerald-500/10" id="brand-icon-box">
+<i class="w-5 h-5" data-lucide="timer"></i>
+</div>
+<div>
+<h1 class="text-xl font-bold tracking-tight bg-gradient-to-r from-white via-slate-100 to-slate-400 bg-clip-text text-transparent flex items-center gap-2">
+          FocusFlow
+          <span class="text-[10px] uppercase tracking-widest px-2 py-0.5 rounded-full font-semibold bg-white/10 text-white/80 border border-white/10">Pro</span>
+</h1>
+<p class="text-xs text-slate-400 font-medium">Temporizador Pomodoro Inteligente</p>
+</div>
+</div>
+<!-- Quick Action Controls in Header -->
+<div class="flex items-center gap-2.5">
+<!-- Quick Sound Toggle Button -->
+<button class="p-2.5 rounded-xl glass-card hover:bg-white/10 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-95" id="sound-quick-toggle" title="Alternar sonido de alarma">
+<i class="w-4 h-4" data-lucide="volume-2" id="sound-icon-status"></i>
+</button>
+<!-- Settings Button -->
+<button class="flex items-center gap-2 px-3.5 py-2 rounded-xl glass-card hover:bg-white/10 text-slate-200 hover:text-white transition-all duration-200 border border-white/10 active:scale-95 text-xs font-semibold" id="settings-btn" title="Ajustes de tiempo y sonido">
+<i class="w-4 h-4" data-lucide="sliders-horizontal"></i>
+<span>Ajustes</span>
+</button>
+</div>
+</header>
+<!-- Main Container -->
+<main class="w-full max-w-4xl px-4 py-4 flex flex-col items-center justify-center flex-grow z-10 gap-8">
+<!-- Central Glassmorphism Timer Card -->
+<div class="w-full max-w-lg glass-panel rounded-3xl p-7 md:p-8 flex flex-col items-center relative transition-all duration-500 theme-transition">
+<!-- Mode Selector Pills -->
+<div class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-900/60 border border-white/10 w-full max-w-md mb-8">
+<button class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 accent-btn-active" id="mode-focus" onclick="switchMode('focus')">
+<i class="w-4 h-4" data-lucide="brain"></i>
+<span>Concentración</span>
+</button>
+<button class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2" id="mode-short" onclick="switchMode('shortBreak')">
+<i class="w-4 h-4" data-lucide="coffee"></i>
+<span>Descanso Corto</span>
+</button>
+<button class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2" id="mode-long" onclick="switchMode('longBreak')">
+<i class="w-4 h-4" data-lucide="sparkles"></i>
+<span>Descanso Largo</span>
+</button>
+</div>
+<!-- Circular Progress & Digital Display -->
+<div class="relative w-64 h-64 md:w-72 md:h-72 flex items-center justify-center my-2" id="timer-display-container">
+<!-- SVG Circular Ring -->
+<svg class="w-full h-full -rotate-90 transform" viewbox="0 0 240 240">
+<!-- Background track -->
+<circle class="timer-ring-bg" cx="120" cy="120" fill="none" r="102" stroke-width="9"></circle>
+<!-- Active smooth progress track -->
+<circle class="timer-ring-progress" cx="120" cy="120" fill="none" id="progress-circle" r="102" stroke-dasharray="640.88" stroke-dashoffset="0" stroke-linecap="round" stroke-width="9"></circle>
+</svg>
+<!-- Inner Content (Time & State) -->
+<div class="absolute inset-0 flex flex-col items-center justify-center text-center select-none pointer-events-none">
+<span class="px-3 py-1 rounded-full text-[11px] font-bold tracking-wider uppercase bg-white/10 text-slate-300 border border-white/10 mb-2.5 backdrop-blur-sm" id="cycle-badge">
+            Ciclo: 1 de 4
+          </span>
+<div class="font-mono text-5xl md:text-6xl font-bold tracking-tighter text-white drop-shadow-md" id="time-display">
+            25:00
+          </div>
+<span class="text-xs uppercase tracking-widest font-semibold mt-2.5 accent-text" id="timer-status-text">
+            Listo para empezar
+          </span>
+</div>
+</div>
+<!-- Primary Controls (Play / Pause / Reset / Skip) -->
+<div class="flex items-center justify-center gap-3.5 mt-8 w-full">
+<!-- Reset Button -->
+<button class="p-3.5 rounded-2xl glass-card hover:bg-white/15 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-90 group" id="btn-reset" onclick="resetTimer()" title="Reiniciar temporizador actual">
+<i class="w-5 h-5 transition-transform duration-300 group-hover:-rotate-90" data-lucide="rotate-ccw"></i>
+</button>
+<!-- Main Start/Pause Action Button -->
+<button class="px-8 py-3.5 rounded-2xl font-bold text-sm md:text-base flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transition-all duration-300 active:scale-95 accent-btn-active" id="btn-primary" onclick="toggleTimer()">
+<i class="w-5 h-5 fill-current" data-lucide="play" id="btn-primary-icon"></i>
+<span id="btn-primary-label">Iniciar Sesión</span>
+</button>
+<!-- Skip to Next Phase Button -->
+<button class="p-3.5 rounded-2xl glass-card hover:bg-white/15 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-90 group" id="btn-skip" onclick="skipToNextPhase()" title="Saltar al siguiente bloque">
+<i class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" data-lucide="skip-forward"></i>
+</button>
+</div>
+<!-- Quick Session Notification Hint -->
+<div class="mt-5 text-[11px] text-slate-400/90 flex items-center gap-1.5 font-medium" id="auto-switch-hint">
+<i class="w-3.5 h-3.5 text-slate-400" data-lucide="repeat"></i>
+<span>Paso automático al descanso largo tras completar 4 pomodoros</span>
+</div>
+</div>
+<!-- Stats & Cycle Progress Dashboard -->
+<div class="w-full max-w-lg glass-panel rounded-3xl p-5 md:p-6 transition-all duration-500">
+<div class="flex items-center justify-between mb-4 pb-3 border-b border-white/10">
+<div class="flex items-center gap-2">
+<i class="w-4 h-4 text-slate-400" data-lucide="bar-chart-2"></i>
+<h2 class="text-xs uppercase tracking-wider font-bold text-slate-300">Resumen y Estadísticas</h2>
+</div>
+<button class="text-[11px] text-slate-400 hover:text-rose-400 flex items-center gap-1 transition-colors" onclick="resetStats()" title="Reiniciar estadísticas del día">
+<i class="w-3 h-3" data-lucide="trash-2"></i>
+<span>Borrar datos</span>
+</button>
+</div>
+<div class="grid grid-cols-3 gap-3">
+<!-- Pomodoros Counter -->
+<div class="glass-card rounded-2xl p-3.5 flex flex-col items-center text-center border border-white/10 relative overflow-hidden group hover:border-emerald-500/40 transition-colors">
+<div class="w-7 h-7 rounded-lg bg-emerald-500/15 text-emerald-400 flex items-center justify-center mb-1.5">
+<i class="w-4 h-4" data-lucide="flame"></i>
+</div>
+<span class="text-2xl font-mono font-bold text-white tracking-tight" id="stat-pomodoros">0</span>
+<span class="text-[11px] font-semibold text-slate-400 mt-0.5">Pomodoros</span>
+<span class="text-[10px] text-slate-500">Concentración</span>
+</div>
+<!-- Short Breaks Counter -->
+<div class="glass-card rounded-2xl p-3.5 flex flex-col items-center text-center border border-white/10 relative overflow-hidden group hover:border-sky-500/40 transition-colors">
+<div class="w-7 h-7 rounded-lg bg-sky-500/15 text-sky-400 flex items-center justify-center mb-1.5">
+<i class="w-4 h-4" data-lucide="coffee"></i>
+</div>
+<span class="text-2xl font-mono font-bold text-white tracking-tight" id="stat-short-breaks">0</span>
+<span class="text-[11px] font-semibold text-slate-400 mt-0.5">Descansos</span>
+<span class="text-[10px] text-slate-500">Cortos (5 min)</span>
+</div>
+<!-- Long Breaks Counter -->
+<div class="glass-card rounded-2xl p-3.5 flex flex-col items-center text-center border border-white/10 relative overflow-hidden group hover:border-purple-500/40 transition-colors">
+<div class="w-7 h-7 rounded-lg bg-purple-500/15 text-purple-400 flex items-center justify-center mb-1.5">
+<i class="w-4 h-4" data-lucide="sparkles"></i>
+</div>
+<span class="text-2xl font-mono font-bold text-white tracking-tight" id="stat-long-breaks">0</span>
+<span class="text-[11px] font-semibold text-slate-400 mt-0.5">Descansos</span>
+<span class="text-[10px] text-slate-500">Largos (15 min)</span>
+</div>
+</div>
+<!-- Current Cycle Progress Track Dots -->
+<div class="mt-4 pt-3.5 border-t border-white/5 flex items-center justify-between px-1">
+<span class="text-xs text-slate-400 font-medium flex items-center gap-1.5">
+<i class="w-3.5 h-3.5 text-slate-400" data-lucide="target"></i>
+          Objetivo de ciclo (4 Pomodoros):
+        </span>
+<div class="flex items-center gap-1.5" id="cycle-dots-container">
+<!-- Dots rendered dynamically -->
+</div>
+</div>
+</div>
+</main>
+<!-- Clean Minimal Footer -->
+<footer class="w-full max-w-4xl px-6 py-4 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400/80 gap-2 z-10 border-t border-white/5">
+<div class="flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+<span>FocusFlow Pomodoro · Potencia tu concentración</span>
+</div>
+<div class="flex items-center gap-4 text-[11px]">
+<span class="hover:text-slate-300">Técnica Pomodoro 25/5/15</span>
+<span>•</span>
+<span class="text-slate-400">Web Audio API activado</span>
+</div>
+</footer>
+<!-- Settings Modal (Glassmorphic) -->
+<div class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4" id="settings-modal">
+<div class="w-full max-w-md glass-panel rounded-3xl p-6 border border-white/15 modal-enter shadow-2xl relative">
+<div class="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
+<div class="flex items-center gap-2.5">
+<div class="p-2 rounded-xl bg-white/10 text-white">
+<i class="w-4 h-4" data-lucide="settings"></i>
+</div>
+<div>
+<h3 class="text-base font-bold text-white">Configuración del Temporizador</h3>
+<p class="text-xs text-slate-400">Ajusta los tiempos de duración y sonido</p>
+</div>
+</div>
+<button class="p-2 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white transition-colors" id="close-modal-btn">
+<i class="w-4 h-4" data-lucide="x"></i>
+</button>
+</div>
+<div class="space-y-4">
+<!-- Focus Duration -->
+<div class="space-y-1.5">
+<div class="flex justify-between items-center text-xs">
+<span class="font-medium text-slate-200">Tiempo de Concentración</span>
+<span class="font-mono font-bold text-emerald-400" id="display-set-focus">25 min</span>
+</div>
+<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer" id="input-focus" max="60" min="5" step="1" type="range" value="25"/>
+<div class="flex justify-between text-[10px] text-slate-500">
+<span>5 min</span>
+<span>25 min</span>
+<span>60 min</span>
+</div>
+</div>
+<!-- Short Break Duration -->
+<div class="space-y-1.5 pt-2">
+<div class="flex justify-between items-center text-xs">
+<span class="font-medium text-slate-200">Descanso Corto</span>
+<span class="font-mono font-bold text-sky-400" id="display-set-short">5 min</span>
+</div>
+<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer" id="input-short" max="15" min="1" step="1" type="range" value="5"/>
+<div class="flex justify-between text-[10px] text-slate-500">
+<span>1 min</span>
+<span>5 min</span>
+<span>15 min</span>
+</div>
+</div>
+<!-- Long Break Duration -->
+<div class="space-y-1.5 pt-2">
+<div class="flex justify-between items-center text-xs">
+<span class="font-medium text-slate-200">Descanso Largo</span>
+<span class="font-mono font-bold text-purple-400" id="display-set-long">15 min</span>
+</div>
+<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer" id="input-long" max="30" min="5" step="1" type="range" value="15"/>
+<div class="flex justify-between text-[10px] text-slate-500">
+<span>5 min</span>
+<span>15 min</span>
+<span>30 min</span>
+</div>
+</div>
+<!-- Audio Alerts Toggle & Test Sound -->
+<div class="pt-4 border-t border-white/10 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-200">Sonido de Campana Suave</span>
+<span class="text-[11px] text-slate-400">Tono armónico con Web Audio API</span>
+</div>
+<div class="flex items-center gap-3">
+<button class="text-xs px-2.5 py-1 rounded-lg glass-card hover:bg-white/15 text-slate-300 hover:text-white border border-white/10" onclick="testChimeSound()" type="button">
+              Probar
+            </button>
+<label class="relative inline-flex items-center cursor-pointer">
+<input checked="" class="sr-only peer" id="sound-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+</div>
+<!-- Auto Transition Toggle -->
+<div class="pt-2 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-200">Inicio Automático</span>
+<span class="text-[11px] text-slate-400">Iniciar cuenta atrás al cambiar de fase</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="autostart-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+</label>
+</div>
+</div>
+<!-- Modal Footer -->
+<div class="flex items-center justify-end gap-2.5 mt-6 pt-4 border-t border-white/10">
+<button class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors" id="btn-cancel-settings">
+          Cancelar
+        </button>
+<button class="px-5 py-2 rounded-xl text-xs font-bold text-slate-950 bg-emerald-400 hover:bg-emerald-300 transition-all shadow-lg shadow-emerald-500/20 active:scale-95" id="btn-save-settings">
+          Guardar Cambios
+        </button>
+</div>
+</div>
+</div>
+<!-- Integrated Application JavaScript -->
+<script>
+    // State management
+    const state = {
+      mode: 'focus', // 'focus' | 'shortBreak' | 'longBreak'
+      timeLeft: 25 * 60,
+      totalTime: 25 * 60,
+      isRunning: false,
+      timerInterval: null,
+      cycleCount: 1, // 1 through 4
+      stats: {
+        pomodoros: 0,
+        shortBreaks: 0,
+        longBreaks: 0
+      },
+      settings: {
+        focusMinutes: 25,
+        shortBreakMinutes: 5,
+        longBreakMinutes: 15,
+        soundEnabled: true,
+        autoStartNext: false
+      }
+    };
+
+    // Color theme configuration per mode
+    const modeConfigs = {
+      focus: {
+        name: 'Concentración',
+        accent: '#10b981',
+        glow: 'rgba(16, 185, 129, 0.4)',
+        light: '#34d399',
+        statusText: 'Sesión de Enfoque Activa',
+        buttonClass: 'bg-emerald-500',
+        brandIconClass: 'text-emerald-400 shadow-emerald-500/20',
+      },
+      shortBreak: {
+        name: 'Descanso Corto',
+        accent: '#38bdf8',
+        glow: 'rgba(56, 189, 248, 0.4)',
+        light: '#7dd3fc',
+        statusText: 'Relájate y Estira un poco',
+        buttonClass: 'bg-sky-400',
+        brandIconClass: 'text-sky-400 shadow-sky-500/20',
+      },
+      longBreak: {
+        name: 'Descanso Largo',
+        accent: '#c084fc',
+        glow: 'rgba(192, 132, 252, 0.4)',
+        light: '#d8b4fe',
+        statusText: 'Gran trabajo, desconecta la mente',
+        buttonClass: 'bg-purple-400',
+        brandIconClass: 'text-purple-400 shadow-purple-500/20',
+      }
+    };
+
+    // SVG Circle Radius math
+    const CIRCLE_RADIUS = 102;
+    const CIRCLE_CIRCUMFERENCE = 2 * Math.PI * CIRCLE_RADIUS; // ~640.88
+
+    // DOM Elements
+    const timeDisplay = document.getElementById('time-display');
+    const timerStatusText = document.getElementById('timer-status-text');
+    const cycleBadge = document.getElementById('cycle-badge');
+    const progressCircle = document.getElementById('progress-circle');
+    const btnPrimary = document.getElementById('btn-primary');
+    const btnPrimaryIcon = document.getElementById('btn-primary-icon');
+    const btnPrimaryLabel = document.getElementById('btn-primary-label');
+    const ambientGlow = document.getElementById('ambient-glow');
+    const brandIconBox = document.getElementById('brand-icon-box');
+    const cycleDotsContainer = document.getElementById('cycle-dots-container');
+
+    // Stat Elements
+    const statPomodoros = document.getElementById('stat-pomodoros');
+    const statShortBreaks = document.getElementById('stat-short-breaks');
+    const statLongBreaks = document.getElementById('stat-long-breaks');
+
+    // Settings Modal Elements
+    const settingsModal = document.getElementById('settings-modal');
+    const settingsBtn = document.getElementById('settings-btn');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const btnCancelSettings = document.getElementById('btn-cancel-settings');
+    const btnSaveSettings = document.getElementById('btn-save-settings');
+
+    const inputFocus = document.getElementById('input-focus');
+    const inputShort = document.getElementById('input-short');
+    const inputLong = document.getElementById('input-long');
+    const displaySetFocus = document.getElementById('display-set-focus');
+    const displaySetShort = document.getElementById('display-set-short');
+    const displaySetLong = document.getElementById('display-set-long');
+    const soundCheckbox = document.getElementById('sound-checkbox');
+    const autostartCheckbox = document.getElementById('autostart-checkbox');
+    const soundQuickToggle = document.getElementById('sound-quick-toggle');
+    const soundIconStatus = document.getElementById('sound-icon-status');
+
+    // Initialize SVG dasharray
+    progressCircle.style.strokeDasharray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
+    progressCircle.style.strokeDashoffset = 0;
+
+    // Web Audio API Chime Bell Generator
+    function playHarmonicChime() {
+      if (!state.settings.soundEnabled) return;
+
+      try {
+        const AudioContext = window.AudioContext || window.webkitAudioContext;
+        if (!AudioContext) return;
+        const ctx = new AudioContext();
+
+        // Harmonious zen meditation chime frequencies (C5, G5, C6)
+        const notes = [523.25, 783.99, 1046.50];
+        
+        notes.forEach((freq, index) => {
+          const osc = ctx.createOscillator();
+          const gain = ctx.createGain();
+
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(freq, ctx.currentTime);
+
+          // Staggered gentle chime envelope
+          const startTime = ctx.currentTime + (index * 0.08);
+          const duration = 2.4 - (index * 0.3);
+
+          gain.gain.setValueAtTime(0.0001, startTime);
+          gain.gain.exponentialRampToValueAtTime(0.25 / (index + 1), startTime + 0.04);
+          gain.gain.exponentialRampToValueAtTime(0.0001, startTime + duration);
+
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+
+          osc.start(startTime);
+          osc.stop(startTime + duration + 0.1);
+        });
+      } catch (e) {
+        console.warn('Web Audio not allowed without prior user interaction', e);
+      }
+    }
+
+    function testChimeSound() {
+      playHarmonicChime();
+    }
+
+    // Update Browser Document Title
+    function updateDocumentTitle() {
+      const minutes = Math.floor(state.timeLeft / 60);
+      const seconds = state.timeLeft % 60;
+      const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+      const modeLabel = modeConfigs[state.mode].name;
+      const icon = state.isRunning ? '▶' : '⏸';
+      document.title = `${icon} ${formatted} - ${modeLabel} | FocusFlow`;
+    }
+
+    // Format & Render Time Display
+    function renderTime() {
+      const minutes = Math.floor(state.timeLeft / 60);
+      const seconds = state.timeLeft % 60;
+      timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+
+      // Update Circle Progress
+      const fractionRemaining = state.timeLeft / state.totalTime;
+      const offset = CIRCLE_CIRCUMFERENCE - (fractionRemaining * CIRCLE_CIRCUMFERENCE);
+      progressCircle.style.strokeDashoffset = offset;
+
+      updateDocumentTitle();
+    }
+
+    // Render Cycle Dots (1 through 4)
+    function renderCycleDots() {
+      cycleDotsContainer.innerHTML = '';
+      for (let i = 1; i <= 4; i++) {
+        const dot = document.createElement('div');
+        if (i < state.cycleCount) {
+          // Completed in this cycle
+          dot.className = 'w-2.5 h-2.5 rounded-full bg-emerald-400 shadow-sm shadow-emerald-400/50';
+        } else if (i === state.cycleCount) {
+          // Current active
+          dot.className = 'w-3 h-3 rounded-full border-2 border-white transition-all bg-emerald-500 ring-2 ring-emerald-500/40';
+        } else {
+          // Upcoming
+          dot.className = 'w-2 h-2 rounded-full bg-white/20';
+        }
+        cycleDotsContainer.appendChild(dot);
+      }
+      cycleBadge.textContent = `Ciclo: ${state.cycleCount} de 4`;
+    }
+
+    // Update Mode Themes and CSS Variables
+    function applyTheme() {
+      const config = modeConfigs[state.mode];
+      document.documentElement.style.setProperty('--current-accent', config.accent);
+      document.documentElement.style.setProperty('--current-accent-glow', config.glow);
+      document.documentElement.style.setProperty('--current-accent-light', config.light);
+
+      // Buttons styling for modes
+      const modeButtons = {
+        focus: document.getElementById('mode-focus'),
+        shortBreak: document.getElementById('mode-short'),
+        longBreak: document.getElementById('mode-long')
+      };
+
+      Object.keys(modeButtons).forEach(m => {
+        const btn = modeButtons[m];
+        if (m === state.mode) {
+          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 accent-btn-active';
+        } else {
+          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2';
+        }
+      });
+
+      // Update ambient blur & icon box
+      ambientGlow.style.backgroundColor = config.accent;
+
+      // Status text updating
+      if (!state.isRunning) {
+        timerStatusText.textContent = `Pausado: ${config.name}`;
+      } else {
+        timerStatusText.textContent = config.statusText;
+      }
+    }
+
+    // Switch Timer Mode
+    function switchMode(newMode, shouldAutoStart = false) {
+      clearInterval(state.timerInterval);
+      state.isRunning = false;
+      state.mode = newMode;
+
+      let minutes = state.settings.focusMinutes;
+      if (newMode === 'shortBreak') minutes = state.settings.shortBreakMinutes;
+      if (newMode === 'longBreak') minutes = state.settings.longBreakMinutes;
+
+      state.totalTime = minutes * 60;
+      state.timeLeft = state.totalTime;
+
+      applyTheme();
+      updatePlayButtonUI();
+      renderTime();
+
+      const container = document.getElementById('timer-display-container');
+      container.classList.remove('timer-running-pulse');
+
+      if (shouldAutoStart || state.settings.autoStartNext) {
+        startTimer();
+      }
+    }
+
+    // Start / Pause Toggle
+    function toggleTimer() {
+      if (state.isRunning) {
+        pauseTimer();
+      } else {
+        startTimer();
+      }
+    }
+
+    function startTimer() {
+      if (state.isRunning) return;
+      state.isRunning = true;
+      updatePlayButtonUI();
+      timerStatusText.textContent = modeConfigs[state.mode].statusText;
+
+      const container = document.getElementById('timer-display-container');
+      container.classList.add('timer-running-pulse');
+
+      state.timerInterval = setInterval(() => {
+        if (state.timeLeft > 0) {
+          state.timeLeft--;
+          renderTime();
+        } else {
+          handlePhaseComplete();
+        }
+      }, 1000);
+    }
+
+    function pauseTimer() {
+      state.isRunning = false;
+      clearInterval(state.timerInterval);
+      updatePlayButtonUI();
+      timerStatusText.textContent = 'En pausa';
+
+      const container = document.getElementById('timer-display-container');
+      container.classList.remove('timer-running-pulse');
+      updateDocumentTitle();
+    }
+
+    function resetTimer() {
+      clearInterval(state.timerInterval);
+      state.isRunning = false;
+
+      let minutes = state.settings.focusMinutes;
+      if (state.mode === 'shortBreak') minutes = state.settings.shortBreakMinutes;
+      if (state.mode === 'longBreak') minutes = state.settings.longBreakMinutes;
+
+      state.totalTime = minutes * 60;
+      state.timeLeft = state.totalTime;
+
+      updatePlayButtonUI();
+      applyTheme();
+      renderTime();
+
+      const container = document.getElementById('timer-display-container');
+      container.classList.remove('timer-running-pulse');
+    }
+
+    function updatePlayButtonUI() {
+      if (state.isRunning) {
+        btnPrimaryLabel.textContent = 'Pausar';
+        btnPrimaryIcon.setAttribute('data-lucide', 'pause');
+      } else {
+        btnPrimaryLabel.textContent = state.timeLeft === state.totalTime ? 'Iniciar Sesión' : 'Reanudar';
+        btnPrimaryIcon.setAttribute('data-lucide', 'play');
+      }
+      lucide.createIcons();
+    }
+
+    // Timer Completed Event Handler
+    function handlePhaseComplete() {
+      clearInterval(state.timerInterval);
+      state.isRunning = false;
+      playHarmonicChime();
+
+      if (state.mode === 'focus') {
+        state.stats.pomodoros++;
+        statPomodoros.textContent = state.stats.pomodoros;
+
+        // Check if 4 Pomodoro cycle is reached
+        if (state.cycleCount >= 4) {
+          // Finished full cycle -> Long Break
+          state.cycleCount = 1;
+          renderCycleDots();
+          switchMode('longBreak', true);
+        } else {
+          // Go to short break and advance cycle
+          state.cycleCount++;
+          renderCycleDots();
+          switchMode('shortBreak', true);
+        }
+      } else if (state.mode === 'shortBreak') {
+        state.stats.shortBreaks++;
+        statShortBreaks.textContent = state.stats.shortBreaks;
+        switchMode('focus', true);
+      } else if (state.mode === 'longBreak') {
+        state.stats.longBreaks++;
+        statLongBreaks.textContent = state.stats.longBreaks;
+        switchMode('focus', true);
+      }
+    }
+
+    // Skip to Next Phase Manually
+    function skipToNextPhase() {
+      if (confirm('¿Deseas saltar a la siguiente etapa de tiempo?')) {
+        if (state.mode === 'focus') {
+          if (state.cycleCount >= 4) {
+            state.cycleCount = 1;
+            renderCycleDots();
+            switchMode('longBreak', false);
+          } else {
+            state.cycleCount++;
+            renderCycleDots();
+            switchMode('shortBreak', false);
+          }
+        } else {
+          switchMode('focus', false);
+        }
+      }
+    }
+
+    // Reset All Daily Statistics
+    function resetStats() {
+      if (confirm('¿Deseas reiniciar los contadores de pomodoros y descansos a cero?')) {
+        state.stats.pomodoros = 0;
+        state.stats.shortBreaks = 0;
+        state.stats.longBreaks = 0;
+        state.cycleCount = 1;
+
+        statPomodoros.textContent = '0';
+        statShortBreaks.textContent = '0';
+        statLongBreaks.textContent = '0';
+        renderCycleDots();
+      }
+    }
+
+    // Settings Modal Logic
+    settingsBtn.addEventListener('click', () => {
+      inputFocus.value = state.settings.focusMinutes;
+      inputShort.value = state.settings.shortBreakMinutes;
+      inputLong.value = state.settings.longBreakMinutes;
+      displaySetFocus.textContent = `${state.settings.focusMinutes} min`;
+      displaySetShort.textContent = `${state.settings.shortBreakMinutes} min`;
+      displaySetLong.textContent = `${state.settings.longBreakMinutes} min`;
+      soundCheckbox.checked = state.settings.soundEnabled;
+      autostartCheckbox.checked = state.settings.autoStartNext;
+
+      settingsModal.classList.remove('hidden');
+      settingsModal.classList.add('flex');
+    });
+
+    function closeSettingsModal() {
+      settingsModal.classList.add('hidden');
+      settingsModal.classList.remove('flex');
+    }
+
+    closeModalBtn.addEventListener('click', closeSettingsModal);
+    btnCancelSettings.addEventListener('click', closeSettingsModal);
+
+    inputFocus.addEventListener('input', (e) => {
+      displaySetFocus.textContent = `${e.target.value} min`;
+    });
+    inputShort.addEventListener('input', (e) => {
+      displaySetShort.textContent = `${e.target.value} min`;
+    });
+    inputLong.addEventListener('input', (e) => {
+      displaySetLong.textContent = `${e.target.value} min`;
+    });
+
+    btnSaveSettings.addEventListener('click', () => {
+      state.settings.focusMinutes = parseInt(inputFocus.value, 10);
+      state.settings.shortBreakMinutes = parseInt(inputShort.value, 10);
+      state.settings.longBreakMinutes = parseInt(inputLong.value, 10);
+      state.settings.soundEnabled = soundCheckbox.checked;
+      state.settings.autoStartNext = autostartCheckbox.checked;
+
+      // Update sound quick icon
+      updateSoundIconUI();
+
+      // Reset currently active mode timer with new duration if stopped
+      if (!state.isRunning) {
+        resetTimer();
+      }
+
+      closeSettingsModal();
+    });
+
+    // Quick Sound Toggle in Header
+    soundQuickToggle.addEventListener('click', () => {
+      state.settings.soundEnabled = !state.settings.soundEnabled;
+      updateSoundIconUI();
+      if (state.settings.soundEnabled) {
+        playHarmonicChime();
+      }
+    });
+
+    function updateSoundIconUI() {
+      if (state.settings.soundEnabled) {
+        soundIconStatus.setAttribute('data-lucide', 'volume-2');
+        soundQuickToggle.classList.remove('text-slate-500');
+        soundQuickToggle.classList.add('text-slate-200');
+      } else {
+        soundIconStatus.setAttribute('data-lucide', 'volume-x');
+        soundQuickToggle.classList.add('text-slate-500');
+        soundQuickToggle.classList.remove('text-slate-200');
+      }
+      lucide.createIcons();
+    }
+
+    // Keyboard Shortcuts (Space for Play/Pause, R for Reset)
+    window.addEventListener('keydown', (e) => {
+      if (settingsModal.classList.contains('flex')) return; // Ignore if modal open
+      if (e.code === 'Space') {
+        e.preventDefault();
+        toggleTimer();
+      } else if (e.key === 'r' || e.key === 'R') {
+        resetTimer();
+      }
+    });
+
+    // Initial setup on load
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      applyTheme();
+      renderCycleDots();
+      renderTime();
+      updateSoundIconUI();
+    });
+  </script>
+</body>
+</html>
