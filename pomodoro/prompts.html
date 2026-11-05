@@ -1,1 +1,89 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proceso de Resolución - Prompts Pomodoro</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+  <style>
+    body { font-family: 'Plus Jakarta Sans', sans-serif; }
+    code, pre { font-family: 'JetBrains Mono', monospace; }
+  </style>
+</head>
+<body class="bg-slate-950 text-slate-100 min-h-screen p-6 md:p-12">
+  <div class="max-w-4xl mx-auto space-y-8">
+    
+    <!-- Encabezado -->
+    <header class="border-b border-white/10 pb-6">
+      <h1 class="text-3xl font-bold text-emerald-400">Proceso de Resolución: Aplicación Pomodoro</h1>
+      <p class="text-slate-400 mt-2 text-sm">Historial de prompts e Inteligencia Artificial empleados para el desarrollo de la app.</p>
+    </header>
 
+    <!-- Herramientas Utilizadas -->
+    <section class="bg-slate-900/60 p-5 rounded-2xl border border-white/10">
+      <h2 class="text-lg font-semibold text-white mb-2">IAs Utilizadas</h2>
+      <ul class="list-disc list-inside text-slate-300 space-y-1 text-sm">
+        <li><strong>Stitch / Asistente de IA:</strong> Generación completa del código HTML, CSS (Tailwind) y JavaScript.</li>
+        <li><strong>Gemini:</strong> Formulación y refinamiento de los prompts técnicos de diseño y funcionalidad.</li>
+      </ul>
+    </section>
+
+    <!-- Prompts Aplicados -->
+    <section class="space-y-6">
+      <h2 class="text-xl font-bold text-white">Registro de Prompts Aplicados</h2>
+
+      <!-- Prompt 1 -->
+      <article class="bg-slate-900/80 p-6 rounded-2xl border border-white/10 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Prompt 1 · Diseño Visual y Funciones Avanzadas</span>
+        </div>
+        <p class="text-xs text-slate-400">Solicitud para rehacer la app con una paleta de colores Dark Mode/Pastel, fondo acogedor de estudio, temporizador circular y contadores completados.</p>
+        <pre class="bg-slate-950 p-4 rounded-xl text-xs text-slate-300 whitespace-pre-wrap border border-white/5 overflow-x-auto">"Crea una aplicación web completa y profesional de un temporizador Pomodoro en un único archivo (HTML con CSS y JavaScript integrados). Debe ser totalmente responsiva, moderna y con un diseño impecable.
+
+Diseño y Estética:
+1. Fondo e Interfaz: Utiliza un fondo elegante y relajante con una imagen de alta calidad de Unsplash basada en un espacio de trabajo minimalista o estudio acogedor (mediante URL directa de images.unsplash.com), aplicando una capa semitransparente (overlay) o un efecto de desfoque suave (glassmorphic/backdrop-filter) para garantizar excelente legibilidad.
+2. Paleta de Colores Moderna: Olvida los colores planos primarios. Usa una paleta pastel o tono neón suave (estilo Dark Mode premium), donde los tonos cambien suavemente mediante transiciones CSS al cambiar de modo (ej. verde menta/esmeralda para concentración, azul sereno para descanso corto, y morado/lavanda para descanso largo).
+
+Requisitos de Funcionalidad:
+1. Modos de Tiempo Personalizables:
+   - Modo Concentración / Trabajo (por defecto 25 minutos, ajustable a 60 min u otros).
+   - Descanso corto (5 minutos).
+   - Descanso largo (15 minutos).
+2. Controles y Visualización:
+   - Botones de Iniciar, Pausar y Reiniciar (Reset) con animaciones al pasar el cursor (hover).
+   - Un gran temporizador digital acompañado de un anillo de progreso circular fluido que se vaya consumiendo a medida que pasa el tiempo.
+   - Cambio del título del navegador (document.title) para ver el tiempo restante en la pestaña.
+3. Panel de Estadísticas Completo:
+   - Contador de sesiones de trabajo / Pomodoros completados.
+   - Contador de descansos cortos realizados.
+   - Contador de descansos largos realizados.
+   - Indicador de ciclo actual (ej. "Pomodoro 3 de 4") y cambio automático al descanso largo tras 4 Pomodoros.
+4. Alertas y Personalización:
+   - Reproducción de un sonido suave de aviso (usando Web Audio API para no depender de archivos externos) al terminar cada temporizador.
+   - Modal o desplegable de ajustes para modificar la duración de cada modo y activar/desactivar el sonido.
+
+Proporciona únicamente el código completo en un solo bloque de código, listo para copiar y guardar como index.html."</pre>
+      </article>
+
+      <!-- Prompt 2 -->
+      <article class="bg-slate-900/80 p-6 rounded-2xl border border-white/10 space-y-3">
+        <div class="flex items-center justify-between">
+          <span class="text-xs font-bold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">Prompt 2 · Ajuste de Contadores de Descansos</span>
+        </div>
+        <p class="text-xs text-slate-400">Revisión específica para garantizar que se incluyera el seguimiento numérico exacto de los descansos realizados.</p>
+        <pre class="bg-slate-950 p-4 rounded-xl text-xs text-slate-300 whitespace-pre-wrap border border-white/5 overflow-x-auto">"Añade un contador explícito en la sección de estadísticas que registre cuántos descansos cortos y cuántos descansos largos ha realizado el usuario durante la sesión actual."</pre>
+      </article>
+
+    </section>
+
+    <!-- Enlace de retorno -->
+    <footer class="pt-6 border-t border-white/10 text-center">
+      <a href="index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
+        ← Volver a la aplicación Pomodoro
+      </a>
+    </footer>
+
+  </div>
+</body>
+</html>
