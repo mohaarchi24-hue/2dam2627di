@@ -1,89 +1,147 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Proceso de Resolución - Prompts Pomodoro</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
-  <style>
-    body { font-family: 'Plus Jakarta Sans', sans-serif; }
-    code, pre { font-family: 'JetBrains Mono', monospace; }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proceso de Resolución: Aplicación Pomodoro</title>
+<style>
+  body { margin:0; background:#02060f; color:#e5e7eb; font-family:Arial, Helvetica, sans-serif; line-height:1.6; }
+  .contenedor { max-width:900px; margin:0 auto; padding:40px 20px 80px; }
+  h1 { color:#34d399; margin-bottom:4px; }
+  .subtitulo { color:#94a3b8; margin-top:0; border-bottom:1px solid #1e293b; padding-bottom:16px; }
+  h2 { color:#fff; margin-top:48px; }
+  .caja { background:#0b1220; border:1px solid #1e293b; border-radius:12px; padding:18px 22px; margin:20px 0; }
+  .etiqueta { display:inline-block; background:#064e3b; color:#34d399; font-size:13px; padding:3px 10px; border-radius:20px; margin-bottom:8px; }
+  .ia { color:#fbbf24; font-weight:bold; }
+  pre { background:#050a14; border:1px solid #1e293b; border-radius:8px; padding:14px; white-space:pre-wrap; font-size:13px; color:#cbd5e1; }
+  figure { margin:16px 0; }
+  figure img { width:100%; border-radius:8px; border:1px solid #1e293b; }
+  figcaption { font-size:13px; color:#94a3b8; margin-top:6px; }
+  a { color:#34d399; }
+  .enlaces li { margin:6px 0; }
+</style>
 </head>
-<body class="bg-slate-950 text-slate-100 min-h-screen p-6 md:p-12">
-  <div class="max-w-4xl mx-auto space-y-8">
-    
-    <!-- Encabezado -->
-    <header class="border-b border-white/10 pb-6">
-      <h1 class="text-3xl font-bold text-emerald-400">Proceso de Resolución: Aplicación Pomodoro</h1>
-      <p class="text-slate-400 mt-2 text-sm">Historial de prompts e Inteligencia Artificial empleados para el desarrollo de la app.</p>
-    </header>
+<body>
+<div class="contenedor">
 
-    <!-- Herramientas Utilizadas -->
-    <section class="bg-slate-900/60 p-5 rounded-2xl border border-white/10">
-      <h2 class="text-lg font-semibold text-white mb-2">IAs Utilizadas</h2>
-      <ul class="list-disc list-inside text-slate-300 space-y-1 text-sm">
-        <li><strong>Stitch / Asistente de IA:</strong> Generación completa del código HTML, CSS (Tailwind) y JavaScript.</li>
-        <li><strong>Gemini:</strong> Formulación y refinamiento de los prompts técnicos de diseño y funcionalidad.</li>
-      </ul>
-    </section>
+  <h1>Proceso de Resolución: Aplicación Pomodoro</h1>
+  <p class="subtitulo">Prompts, IAs usadas y capturas del proceso, en el orden en que los apliqué. — Mohamed Aharchi Sellami · Diseño de interfaces</p>
 
-    <!-- Prompts Aplicados -->
-    <section class="space-y-6">
-      <h2 class="text-xl font-bold text-white">Registro de Prompts Aplicados</h2>
-
-      <!-- Prompt 1 -->
-      <article class="bg-slate-900/80 p-6 rounded-2xl border border-white/10 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold px-3 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">Prompt 1 · Diseño Visual y Funciones Avanzadas</span>
-        </div>
-        <p class="text-xs text-slate-400">Solicitud para rehacer la app con una paleta de colores Dark Mode/Pastel, fondo acogedor de estudio, temporizador circular y contadores completados.</p>
-        <pre class="bg-slate-950 p-4 rounded-xl text-xs text-slate-300 whitespace-pre-wrap border border-white/5 overflow-x-auto">"Crea una aplicación web completa y profesional de un temporizador Pomodoro en un único archivo (HTML con CSS y JavaScript integrados). Debe ser totalmente responsiva, moderna y con un diseño impecable.
-
-Diseño y Estética:
-1. Fondo e Interfaz: Utiliza un fondo elegante y relajante con una imagen de alta calidad de Unsplash basada en un espacio de trabajo minimalista o estudio acogedor (mediante URL directa de images.unsplash.com), aplicando una capa semitransparente (overlay) o un efecto de desfoque suave (glassmorphic/backdrop-filter) para garantizar excelente legibilidad.
-2. Paleta de Colores Moderna: Olvida los colores planos primarios. Usa una paleta pastel o tono neón suave (estilo Dark Mode premium), donde los tonos cambien suavemente mediante transiciones CSS al cambiar de modo (ej. verde menta/esmeralda para concentración, azul sereno para descanso corto, y morado/lavanda para descanso largo).
-
-Requisitos de Funcionalidad:
-1. Modos de Tiempo Personalizables:
-   - Modo Concentración / Trabajo (por defecto 25 minutos, ajustable a 60 min u otros).
-   - Descanso corto (5 minutos).
-   - Descanso largo (15 minutos).
-2. Controles y Visualización:
-   - Botones de Iniciar, Pausar y Reiniciar (Reset) con animaciones al pasar el cursor (hover).
-   - Un gran temporizador digital acompañado de un anillo de progreso circular fluido que se vaya consumiendo a medida que pasa el tiempo.
-   - Cambio del título del navegador (document.title) para ver el tiempo restante en la pestaña.
-3. Panel de Estadísticas Completo:
-   - Contador de sesiones de trabajo / Pomodoros completados.
-   - Contador de descansos cortos realizados.
-   - Contador de descansos largos realizados.
-   - Indicador de ciclo actual (ej. "Pomodoro 3 de 4") y cambio automático al descanso largo tras 4 Pomodoros.
-4. Alertas y Personalización:
-   - Reproducción de un sonido suave de aviso (usando Web Audio API para no depender de archivos externos) al terminar cada temporizador.
-   - Modal o desplegable de ajustes para modificar la duración de cada modo y activar/desactivar el sonido.
-
-Proporciona únicamente el código completo en un solo bloque de código, listo para copiar y guardar como index.html."</pre>
-      </article>
-
-      <!-- Prompt 2 -->
-      <article class="bg-slate-900/80 p-6 rounded-2xl border border-white/10 space-y-3">
-        <div class="flex items-center justify-between">
-          <span class="text-xs font-bold px-3 py-1 rounded-full bg-sky-500/10 text-sky-400 border border-sky-500/20">Prompt 2 · Ajuste de Contadores de Descansos</span>
-        </div>
-        <p class="text-xs text-slate-400">Revisión específica para garantizar que se incluyera el seguimiento numérico exacto de los descansos realizados.</p>
-        <pre class="bg-slate-950 p-4 rounded-xl text-xs text-slate-300 whitespace-pre-wrap border border-white/5 overflow-x-auto">"Añade un contador explícito en la sección de estadísticas que registre cuántos descansos cortos y cuántos descansos largos ha realizado el usuario durante la sesión actual."</pre>
-      </article>
-
-    </section>
-
-    <!-- Enlace de retorno -->
-    <footer class="pt-6 border-t border-white/10 text-center">
-      <a href="index.html" class="inline-flex items-center gap-2 text-xs font-semibold text-emerald-400 hover:text-emerald-300 transition-colors">
-        ← Volver a la aplicación Pomodoro
-      </a>
-    </footer>
-
+  <div class="caja">
+    <strong>IAs utilizadas</strong>
+    <ul>
+      <li><span class="ia">ChatGPT:</span> creación de la portada del PDF.</li>
+      <li><span class="ia">Gemini:</span> redacción y mejora de los prompts de diseño y funcionalidad, y revisión del código.</li>
+      <li><span class="ia">Stitch (Google):</span> generación del prototipo y del código HTML, CSS (Tailwind) y JavaScript.</li>
+      <li><span class="ia">Claude:</span> ayuda para organizar esta página de proceso y la entrega.</li>
+    </ul>
+    <strong>Enlaces</strong>
+    <ul class="enlaces">
+      <li><a href="index.html">Aplicación web Pomodoro</a></li>
+      <li><a href="https://github.com/mohaarchi24-hue/2dam2627di">Repositorio de GitHub</a> (si tu repositorio tiene otra URL, cámbiala aquí)</li>
+    </ul>
   </div>
+
+  <h2>Paso 0 · Portada (ChatGPT)</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: ChatGPT</span>
+    <p>Usé ChatGPT para generar la imagen de la portada del PDF.</p>
+    <p><strong>Prompt:</strong></p>
+    <pre>PEGA AQUÍ EL PROMPT QUE USASTE PARA LA PORTADA</pre>
+    <figure>
+      <img src="capturas/00-portada.png" alt="Portada generada por ChatGPT">
+      <figcaption>Resultado: portada de la aplicación Pomodoro.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 1 · Pedir a Gemini el prompt para Stitch</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Gemini</span>
+    <p>Le pedí a Gemini un prompt muy completo para que Stitch generara el temporizador: modos de concentración, descanso corto (5 min) y descanso largo (15 min), lo más completo posible.</p>
+    <p><strong>Mi prompt a Gemini:</strong></p>
+    <pre>vale entonces dame el prompt para hacer el pomodoro en el stitch quiero que sea lo mas completo posible quiero que sea por ejemplo 1 hora, con otro de descansos de 5 minutos y otros mas largos de 15 eso miralo tu pero que sea lo mas completo posible y si hacen falta mas cosas hazlas para que sea mas completo</pre>
+    <p><strong>Resultado de Gemini:</strong> me dio un prompt listo para copiar y pegar en Stitch, pensado para devolver todo en un único archivo <code>index.html</code>.</p>
+    <pre>PEGA AQUÍ EL PROMPT COMPLETO QUE TE DIO GEMINI (Prompt 1)</pre>
+    <figure>
+      <img src="capturas/01-gemini-pide-prompt.png" alt="Gemini generando el prompt para Stitch">
+      <figcaption>Gemini genera el prompt para Stitch.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 2 · Crear el prototipo en Stitch</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Stitch</span>
+    <p>Pegué el prompt de Gemini en Stitch. Stitch respondió que había creado <strong>FocusFlow Pomodoro Pro</strong>, una aplicación en un único archivo (HTML, Tailwind CSS, Lucide Icons y JavaScript), con estética glassmorphism y fondo de imagen de Unsplash.</p>
+    <figure>
+      <img src="capturas/02-stitch-genera-prototipo.png" alt="Stitch generando el prototipo">
+      <figcaption>Stitch genera la primera versión del prototipo.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 3 · Revisar el código con Gemini</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Gemini</span>
+    <p>Le envié el HTML a Gemini para ver si faltaba algo o se podía mejorar.</p>
+    <p><strong>Mi pregunta:</strong></p>
+    <pre>esto es lo que me ha echo, crees que se podria mejorar algo con otro prompt o asi esat bien ?</pre>
+    <p><strong>Resultado de Gemini:</strong> dijo que el código estaba muy completo (temporizador circular, modos de concentración y descansos, contadores, selector de ciclos, ajustes y sonido con la API Web Audio). Solo señaló un detalle: la imagen de fondo apuntaba a un marcador de posición de Google (<code>stitch-placeholder-300x300.svg</code>). Además me dio dos prompts de mejora opcionales.</p>
+    <pre>PEGA AQUÍ LOS PROMPTS DE MEJORA QUE TE DIO GEMINI (Prompt 2 y Prompt 3)</pre>
+    <figure>
+      <img src="capturas/03-gemini-revisa-html-y-mejoras.png" alt="Gemini revisando el HTML y proponiendo mejoras">
+      <figcaption>Gemini revisa el código y propone prompts de mejora.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 4 · Aplicar las mejoras en Stitch</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Stitch</span>
+    <p>Puse los prompts de mejora en Stitch y comprobé cómo quedaba el Pomodoro. Stitch creó una nueva versión del prototipo.</p>
+    <figure>
+      <img src="capturas/04-stitch-prototipo-creado.png" alt="Stitch con el prototipo creado">
+      <figcaption>Stitch muestra «Prototype created» con las dos versiones.</figcaption>
+    </figure>
+    <figure>
+      <img src="capturas/05-stitch-preview-resultado.png" alt="Vista previa del Pomodoro en Stitch">
+      <figcaption>Vista previa del resultado: temporizador de 25:00, modos y resumen de estadísticas.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 5 · Crear esta página con los prompts (Gemini)</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Gemini</span>
+    <p>Le pedí a Gemini un HTML con todos los prompts usados.</p>
+    <p><strong>Mi prompt:</strong></p>
+    <pre>solo me falta un html donde ponga todos los prompts usados, ponme solo los que esten a partir de este mensaje:
+vale
+dame otro prompt ese no me ha gustado mucho por los colores, pidele
+otros mira si falta algo para que sea mas completo y me gustaria tambien
+que tenga algun fondo (no se de que di tu uno bueno)</pre>
+    <p><strong>Resultado:</strong> Gemini me dio un <code>prompts.html</code> sencillo para guardarlo en la carpeta <code>pomodoro</code> del repositorio.</p>
+    <figure>
+      <img src="capturas/06-gemini-crea-prompts-html.png" alt="Gemini creando el HTML de prompts">
+      <figcaption>Gemini genera el HTML con los prompts.</figcaption>
+    </figure>
+    <figure>
+      <img src="capturas/07-pagina-prompts-en-local.png" alt="Primera versión de la página de prompts abierta en el navegador">
+      <figcaption>Primera versión de la página de prompts abierta en el navegador (solo tenía los prompts).</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 6 · Subir todo a GitHub</h2>
+  <div class="caja">
+    <p>Mientras hacía todo, fui actualizando el repositorio de GitHub y publicándolo con GitHub Pages en la carpeta <code>pomodoro</code> (<code>index.html</code> y <code>proceso.html</code>).</p>
+  </div>
+
+  <h2>Paso 7 · Corregir la entrega con Claude</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Claude</span>
+    <p>Me di cuenta de que las capturas tenían que estar en esta página de proceso y no en el PDF, y de que no bastaba con poner los prompts: también hay que poner los resultados que da cada IA. Le pedí a Claude que reorganizara esta página, que recuperara las capturas del PDF y que me explicara los pasos que faltaban.</p>
+    <figure>
+      <img src="capturas/08-claude.png" alt="Conversación con Claude">
+      <figcaption>Conversación con Claude (captura de esta charla).</figcaption>
+    </figure>
+  </div>
+
+</div>
 </body>
 </html>
