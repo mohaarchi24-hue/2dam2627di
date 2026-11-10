@@ -1,14 +1,13 @@
 <!DOCTYPE html>
 
-<html lang="es">
-<head>
+<html lang="es"><head>
 <meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
 <title>25:00 - Concentración | FocusFlow Pomodoro</title>
 <!-- Tailwind CSS CDN -->
-<script src="https://cdn.tailwindcss.com"></script>
-<!-- Lucide Icons -->
-<script src="https://unpkg.com/lucide@latest"></script>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Lucide Icons Stable Version -->
+<script src="https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js"></script>
 <link href="https://fonts.googleapis.com" rel="preconnect"/>
 <link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&amp;family=JetBrains+Mono:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/>
@@ -126,10 +125,10 @@
 </head>
 <body class="min-h-screen text-slate-100 flex flex-col items-center justify-between relative overflow-x-hidden selection:bg-emerald-500/30 selection:text-emerald-200">
 <!-- Background Wallpaper with Overlay and Ambient Vignette -->
-<div class="fixed inset-0 -z-20 bg-cover bg-center transition-all duration-1000 transform scale-105" style="background-image: url('https://www.gstatic.com/labs-code/stitch/stitch-placeholder-300x300.svg');">
+<div class="fixed inset-0 -z-20 bg-cover bg-center transition-all duration-1000 transform scale-105" style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuCjlz3_xwVNNdjgCOaNXPBoAGJyJk0sR8vV4Z-9j8wdYCp2mhKi8LPmTzgI94X_qR0B9nHvqJTDuQkQOKJEyhWziuzdvsOC0MPmljYMvF5b-oCNuJjvT2e-woocay4Ibo05ixgQsHvakroNNpr2ygsxdDBOLHamjyDJ2r295wIOxCnbLa--fFRBjCGrNSp5ihUnTmfRvIEJoyoYfTSU5YgD5pJBzyRRroCTohK882ct');">
 </div>
 <!-- Deep Dark Multi-Layer Gradient Overlays -->
-<div class="fixed inset-0 -z-10 bg-slate-950/80 backdrop-blur-[6px] transition-colors duration-700"></div>
+<div class="fixed inset-0 -z-10 bg-slate-950/80 backdrop-blur-md transition-colors duration-700"></div>
 <div class="fixed inset-0 -z-10 bg-gradient-to-t from-slate-950 via-slate-950/60 to-transparent"></div>
 <div class="fixed top-1/4 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[550px] h-[550px] rounded-full blur-[130px] opacity-25 pointer-events-none theme-transition" id="ambient-glow" style="background-color: var(--current-accent);"></div>
 <!-- Top Navigation Header -->
@@ -149,11 +148,11 @@
 <!-- Quick Action Controls in Header -->
 <div class="flex items-center gap-2.5">
 <!-- Quick Sound Toggle Button -->
-<button class="p-2.5 rounded-xl glass-card hover:bg-white/10 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-95" id="sound-quick-toggle" title="Alternar sonido de alarma">
+<button aria-label="Alternar sonido de alarma" class="p-2.5 rounded-xl glass-card hover:bg-white/10 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-95 focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="sound-quick-toggle" title="Alternar sonido de alarma">
 <i class="w-4 h-4" data-lucide="volume-2" id="sound-icon-status"></i>
 </button>
 <!-- Settings Button -->
-<button class="flex items-center gap-2 px-3.5 py-2 rounded-xl glass-card hover:bg-white/10 text-slate-200 hover:text-white transition-all duration-200 border border-white/10 active:scale-95 text-xs font-semibold" id="settings-btn" title="Ajustes de tiempo y sonido">
+<button aria-label="Abrir ajustes de tiempo y notificaciones" class="flex items-center gap-2 px-3.5 py-2 rounded-xl glass-card hover:bg-white/10 text-slate-200 hover:text-white transition-all duration-200 border border-white/10 active:scale-95 text-xs font-semibold focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="settings-btn" title="Ajustes de tiempo y sonido">
 <i class="w-4 h-4" data-lucide="sliders-horizontal"></i>
 <span>Ajustes</span>
 </button>
@@ -163,17 +162,27 @@
 <main class="w-full max-w-4xl px-4 py-4 flex flex-col items-center justify-center flex-grow z-10 gap-8">
 <!-- Central Glassmorphism Timer Card -->
 <div class="w-full max-w-lg glass-panel rounded-3xl p-7 md:p-8 flex flex-col items-center relative transition-all duration-500 theme-transition">
+<!-- Active Task Input Bar -->
+<div class="w-full max-w-md mb-6">
+<div class="relative flex items-center rounded-2xl bg-slate-900/50 border border-white/10 px-3.5 py-2 glass-card focus-within:border-white/25 focus-within:ring-2 focus-within:ring-emerald-400/40 transition-all duration-200">
+<i class="w-4 h-4 text-slate-400 mr-2.5 flex-shrink-0" data-lucide="edit-3" id="task-icon"></i>
+<input aria-label="Objetivo o tarea de la sesión" class="w-full bg-transparent text-xs md:text-sm text-slate-200 placeholder-slate-400/70 border-none focus:outline-none focus:ring-0 p-0 font-medium" id="task-input" maxlength="60" placeholder="¿En qué estás trabajando ahora?" type="text"/>
+<button aria-label="Limpiar tarea actual" class="p-1 rounded-md text-slate-500 hover:text-slate-300 transition-colors ml-1 hidden" id="task-clear-btn" title="Borrar texto de la tarea">
+<i class="w-3.5 h-3.5" data-lucide="x"></i>
+</button>
+</div>
+</div>
 <!-- Mode Selector Pills -->
 <div class="flex items-center gap-1.5 p-1.5 rounded-2xl bg-slate-900/60 border border-white/10 w-full max-w-md mb-8">
-<button class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 accent-btn-active" id="mode-focus" onclick="switchMode('focus')">
+<button aria-label="Modo Concentración" class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 accent-btn-active focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="mode-focus" onclick="switchMode('focus')">
 <i class="w-4 h-4" data-lucide="brain"></i>
 <span>Concentración</span>
 </button>
-<button class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2" id="mode-short" onclick="switchMode('shortBreak')">
+<button aria-label="Modo Descanso Corto" class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2 focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="mode-short" onclick="switchMode('shortBreak')">
 <i class="w-4 h-4" data-lucide="coffee"></i>
 <span>Descanso Corto</span>
 </button>
-<button class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2" id="mode-long" onclick="switchMode('longBreak')">
+<button aria-label="Modo Descanso Largo" class="flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2 focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="mode-long" onclick="switchMode('longBreak')">
 <i class="w-4 h-4" data-lucide="sparkles"></i>
 <span>Descanso Largo</span>
 </button>
@@ -203,16 +212,16 @@
 <!-- Primary Controls (Play / Pause / Reset / Skip) -->
 <div class="flex items-center justify-center gap-3.5 mt-8 w-full">
 <!-- Reset Button -->
-<button class="p-3.5 rounded-2xl glass-card hover:bg-white/15 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-90 group" id="btn-reset" onclick="resetTimer()" title="Reiniciar temporizador actual">
+<button aria-label="Reiniciar temporizador actual" class="p-3.5 rounded-2xl glass-card hover:bg-white/15 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-90 group focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="btn-reset" onclick="resetTimer()" title="Reiniciar temporizador actual">
 <i class="w-5 h-5 transition-transform duration-300 group-hover:-rotate-90" data-lucide="rotate-ccw"></i>
 </button>
 <!-- Main Start/Pause Action Button -->
-<button class="px-8 py-3.5 rounded-2xl font-bold text-sm md:text-base flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transition-all duration-300 active:scale-95 accent-btn-active" id="btn-primary" onclick="toggleTimer()">
+<button aria-label="Iniciar o pausar sesión" class="px-8 py-3.5 rounded-2xl font-bold text-sm md:text-base flex items-center justify-center gap-3 shadow-xl hover:shadow-2xl transition-all duration-300 active:scale-95 accent-btn-active focus:ring-2 focus:ring-white/40 focus:outline-none" id="btn-primary" onclick="toggleTimer()">
 <i class="w-5 h-5 fill-current" data-lucide="play" id="btn-primary-icon"></i>
 <span id="btn-primary-label">Iniciar Sesión</span>
 </button>
 <!-- Skip to Next Phase Button -->
-<button class="p-3.5 rounded-2xl glass-card hover:bg-white/15 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-90 group" id="btn-skip" onclick="skipToNextPhase()" title="Saltar al siguiente bloque">
+<button aria-label="Saltar al siguiente bloque de tiempo" class="p-3.5 rounded-2xl glass-card hover:bg-white/15 text-slate-300 hover:text-white transition-all duration-200 border border-white/10 active:scale-90 group focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="btn-skip" onclick="skipToNextPhase()" title="Saltar al siguiente bloque">
 <i class="w-5 h-5 transition-transform duration-300 group-hover:translate-x-0.5" data-lucide="skip-forward"></i>
 </button>
 </div>
@@ -229,7 +238,7 @@
 <i class="w-4 h-4 text-slate-400" data-lucide="bar-chart-2"></i>
 <h2 class="text-xs uppercase tracking-wider font-bold text-slate-300">Resumen y Estadísticas</h2>
 </div>
-<button class="text-[11px] text-slate-400 hover:text-rose-400 flex items-center gap-1 transition-colors" onclick="resetStats()" title="Reiniciar estadísticas del día">
+<button aria-label="Reiniciar estadísticas a cero" class="text-[11px] text-slate-400 hover:text-rose-400 flex items-center gap-1 transition-colors focus:ring-1 focus:ring-rose-400 rounded px-1.5 py-0.5 focus:outline-none" onclick="resetStats()" title="Reiniciar estadísticas del día">
 <i class="w-3 h-3" data-lucide="trash-2"></i>
 <span>Borrar datos</span>
 </button>
@@ -288,7 +297,7 @@
 </div>
 </footer>
 <!-- Settings Modal (Glassmorphic) -->
-<div class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4" id="settings-modal">
+<div aria-hidden="true" aria-labelledby="settings-modal-title" aria-modal="true" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden items-center justify-center p-4" id="settings-modal" role="dialog">
 <div class="w-full max-w-md glass-panel rounded-3xl p-6 border border-white/15 modal-enter shadow-2xl relative">
 <div class="flex items-center justify-between pb-4 border-b border-white/10 mb-5">
 <div class="flex items-center gap-2.5">
@@ -296,11 +305,11 @@
 <i class="w-4 h-4" data-lucide="settings"></i>
 </div>
 <div>
-<h3 class="text-base font-bold text-white">Configuración del Temporizador</h3>
-<p class="text-xs text-slate-400">Ajusta los tiempos de duración y sonido</p>
+<h3 class="text-base font-bold text-white" id="settings-modal-title">Configuración del Temporizador</h3>
+<p class="text-xs text-slate-400">Ajusta los tiempos de duración, sonido y notificaciones</p>
 </div>
 </div>
-<button class="p-2 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white transition-colors" id="close-modal-btn">
+<button aria-label="Cerrar modal de configuración" class="p-2 rounded-xl hover:bg-white/10 text-slate-400 hover:text-white transition-colors focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="close-modal-btn">
 <i class="w-4 h-4" data-lucide="x"></i>
 </button>
 </div>
@@ -308,10 +317,10 @@
 <!-- Focus Duration -->
 <div class="space-y-1.5">
 <div class="flex justify-between items-center text-xs">
-<span class="font-medium text-slate-200">Tiempo de Concentración</span>
+<label class="font-medium text-slate-200" for="input-focus">Tiempo de Concentración</label>
 <span class="font-mono font-bold text-emerald-400" id="display-set-focus">25 min</span>
 </div>
-<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer" id="input-focus" max="60" min="5" step="1" type="range" value="25"/>
+<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer focus:outline-none" id="input-focus" max="60" min="5" step="1" type="range" value="25"/>
 <div class="flex justify-between text-[10px] text-slate-500">
 <span>5 min</span>
 <span>25 min</span>
@@ -321,10 +330,10 @@
 <!-- Short Break Duration -->
 <div class="space-y-1.5 pt-2">
 <div class="flex justify-between items-center text-xs">
-<span class="font-medium text-slate-200">Descanso Corto</span>
+<label class="font-medium text-slate-200" for="input-short">Descanso Corto</label>
 <span class="font-mono font-bold text-sky-400" id="display-set-short">5 min</span>
 </div>
-<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer" id="input-short" max="15" min="1" step="1" type="range" value="5"/>
+<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer focus:outline-none" id="input-short" max="15" min="1" step="1" type="range" value="5"/>
 <div class="flex justify-between text-[10px] text-slate-500">
 <span>1 min</span>
 <span>5 min</span>
@@ -334,10 +343,10 @@
 <!-- Long Break Duration -->
 <div class="space-y-1.5 pt-2">
 <div class="flex justify-between items-center text-xs">
-<span class="font-medium text-slate-200">Descanso Largo</span>
+<label class="font-medium text-slate-200" for="input-long">Descanso Largo</label>
 <span class="font-mono font-bold text-purple-400" id="display-set-long">15 min</span>
 </div>
-<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer" id="input-long" max="30" min="5" step="1" type="range" value="15"/>
+<input class="w-full h-1.5 bg-slate-700/80 rounded-lg appearance-none cursor-pointer focus:outline-none" id="input-long" max="30" min="5" step="1" type="range" value="15"/>
 <div class="flex justify-between text-[10px] text-slate-500">
 <span>5 min</span>
 <span>15 min</span>
@@ -351,7 +360,7 @@
 <span class="text-[11px] text-slate-400">Tono armónico con Web Audio API</span>
 </div>
 <div class="flex items-center gap-3">
-<button class="text-xs px-2.5 py-1 rounded-lg glass-card hover:bg-white/15 text-slate-300 hover:text-white border border-white/10" onclick="testChimeSound()" type="button">
+<button aria-label="Probar sonido armónico de campana" class="text-xs px-2.5 py-1 rounded-lg glass-card hover:bg-white/15 text-slate-300 hover:text-white border border-white/10 focus:ring-1 focus:ring-emerald-400 focus:outline-none" onclick="testChimeSound()" type="button">
               Probar
             </button>
 <label class="relative inline-flex items-center cursor-pointer">
@@ -360,11 +369,22 @@
 </label>
 </div>
 </div>
+<!-- Browser Notifications Toggle -->
+<div class="pt-2 flex items-center justify-between">
+<div class="flex flex-col">
+<span class="text-xs font-semibold text-slate-200">Notificaciones del Navegador</span>
+<span class="text-[11px] text-slate-400" id="notification-status-desc">Avisos nativos al terminar cada fase</span>
+</div>
+<label class="relative inline-flex items-center cursor-pointer">
+<input class="sr-only peer" id="notifications-checkbox" type="checkbox"/>
+<div class="w-11 h-6 bg-slate-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-emerald-500"></div>
+</label>
+</div>
 <!-- Auto Transition Toggle -->
 <div class="pt-2 flex items-center justify-between">
 <div class="flex flex-col">
-<span class="text-xs font-semibold text-slate-200">Inicio Automático</span>
-<span class="text-[11px] text-slate-400">Iniciar cuenta atrás al cambiar de fase</span>
+<span class="text-xs font-semibold text-slate-200">Inicio Automático (Auto Start)</span>
+<span class="text-[11px] text-slate-400">Iniciar cuenta atrás automáticamente al cambiar de fase</span>
 </div>
 <label class="relative inline-flex items-center cursor-pointer">
 <input class="sr-only peer" id="autostart-checkbox" type="checkbox"/>
@@ -374,10 +394,10 @@
 </div>
 <!-- Modal Footer -->
 <div class="flex items-center justify-end gap-2.5 mt-6 pt-4 border-t border-white/10">
-<button class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors" id="btn-cancel-settings">
+<button aria-label="Cancelar cambios" class="px-4 py-2 rounded-xl text-xs font-semibold text-slate-300 hover:text-white hover:bg-white/5 transition-colors focus:ring-1 focus:ring-white/20 focus:outline-none" id="btn-cancel-settings">
           Cancelar
         </button>
-<button class="px-5 py-2 rounded-xl text-xs font-bold text-slate-950 bg-emerald-400 hover:bg-emerald-300 transition-all shadow-lg shadow-emerald-500/20 active:scale-95" id="btn-save-settings">
+<button aria-label="Guardar configuración" class="px-5 py-2 rounded-xl text-xs font-bold text-slate-950 bg-emerald-400 hover:bg-emerald-300 transition-all shadow-lg shadow-emerald-500/20 active:scale-95 focus:ring-2 focus:ring-emerald-400 focus:outline-none" id="btn-save-settings">
           Guardar Cambios
         </button>
 </div>
@@ -385,14 +405,21 @@
 </div>
 <!-- Integrated Application JavaScript -->
 <script>
+    const STORAGE_KEY_STATS = 'focusflow_stats';
+    const STORAGE_KEY_SETTINGS = 'focusflow_settings';
+    const STORAGE_KEY_CYCLE = 'focusflow_cycle';
+    const STORAGE_KEY_TASK = 'focusflow_task';
+
     // State management
     const state = {
       mode: 'focus', // 'focus' | 'shortBreak' | 'longBreak'
       timeLeft: 25 * 60,
       totalTime: 25 * 60,
       isRunning: false,
+      endTime: null, // Accurate Date.now() timestamp anchor
       timerInterval: null,
       cycleCount: 1, // 1 through 4
+      currentTask: '',
       stats: {
         pomodoros: 0,
         shortBreaks: 0,
@@ -403,6 +430,7 @@
         shortBreakMinutes: 5,
         longBreakMinutes: 15,
         soundEnabled: true,
+        notificationsEnabled: false,
         autoStartNext: false
       }
     };
@@ -454,6 +482,11 @@
     const brandIconBox = document.getElementById('brand-icon-box');
     const cycleDotsContainer = document.getElementById('cycle-dots-container');
 
+    // Task Elements
+    const taskInput = document.getElementById('task-input');
+    const taskClearBtn = document.getElementById('task-clear-btn');
+    const taskIcon = document.getElementById('task-icon');
+
     // Stat Elements
     const statPomodoros = document.getElementById('stat-pomodoros');
     const statShortBreaks = document.getElementById('stat-short-breaks');
@@ -473,9 +506,125 @@
     const displaySetShort = document.getElementById('display-set-short');
     const displaySetLong = document.getElementById('display-set-long');
     const soundCheckbox = document.getElementById('sound-checkbox');
+    const notificationsCheckbox = document.getElementById('notifications-checkbox');
     const autostartCheckbox = document.getElementById('autostart-checkbox');
     const soundQuickToggle = document.getElementById('sound-quick-toggle');
     const soundIconStatus = document.getElementById('sound-icon-status');
+
+    // LocalStorage helper functions
+    function loadFromLocalStorage() {
+      try {
+        const savedSettings = localStorage.getItem(STORAGE_KEY_SETTINGS);
+        if (savedSettings) {
+          const parsed = JSON.parse(savedSettings);
+          state.settings = { ...state.settings, ...parsed };
+        }
+
+        const savedStats = localStorage.getItem(STORAGE_KEY_STATS);
+        if (savedStats) {
+          const parsedStats = JSON.parse(savedStats);
+          state.stats = { ...state.stats, ...parsedStats };
+        }
+
+        const savedCycle = localStorage.getItem(STORAGE_KEY_CYCLE);
+        if (savedCycle) {
+          const parsedCycle = parseInt(savedCycle, 10);
+          if (parsedCycle >= 1 && parsedCycle <= 4) {
+            state.cycleCount = parsedCycle;
+          }
+        }
+
+        const savedTask = localStorage.getItem(STORAGE_KEY_TASK);
+        if (savedTask !== null) {
+          state.currentTask = savedTask;
+          if (taskInput) {
+            taskInput.value = savedTask;
+            updateTaskUI();
+          }
+        }
+      } catch (err) {
+        console.error('Error loading data from localStorage:', err);
+      }
+    }
+
+    function saveSettingsToLocalStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_SETTINGS, JSON.stringify(state.settings));
+      } catch (err) {
+        console.error('Error saving settings to localStorage:', err);
+      }
+    }
+
+    function saveStatsToLocalStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_STATS, JSON.stringify(state.stats));
+        localStorage.setItem(STORAGE_KEY_CYCLE, state.cycleCount.toString());
+      } catch (err) {
+        console.error('Error saving stats to localStorage:', err);
+      }
+    }
+
+    function saveTaskToLocalStorage() {
+      try {
+        localStorage.setItem(STORAGE_KEY_TASK, state.currentTask);
+      } catch (err) {
+        console.error('Error saving task to localStorage:', err);
+      }
+    }
+
+    // Task input management
+    function updateTaskUI() {
+      if (taskInput.value.trim().length > 0) {
+        taskClearBtn.classList.remove('hidden');
+        taskIcon.classList.remove('text-slate-400');
+        taskIcon.classList.add('accent-text');
+      } else {
+        taskClearBtn.classList.add('hidden');
+        taskIcon.classList.remove('accent-text');
+        taskIcon.classList.add('text-slate-400');
+      }
+    }
+
+    taskInput.addEventListener('input', (e) => {
+      state.currentTask = e.target.value;
+      saveTaskToLocalStorage();
+      updateTaskUI();
+    });
+
+    taskClearBtn.addEventListener('click', () => {
+      taskInput.value = '';
+      state.currentTask = '';
+      saveTaskToLocalStorage();
+      updateTaskUI();
+      taskInput.focus();
+    });
+
+    // Native Browser Notifications
+    async function requestNotificationPermission() {
+      if (!('Notification' in window)) return false;
+      if (Notification.permission === 'granted') return true;
+      if (Notification.permission !== 'denied') {
+        const permission = await Notification.requestPermission();
+        return permission === 'granted';
+      }
+      return false;
+    }
+
+    function triggerNativeNotification(title, message) {
+      if (!state.settings.notificationsEnabled) return;
+      if (!('Notification' in window)) return;
+
+      if (Notification.permission === 'granted') {
+        try {
+          new Notification(title, {
+            body: message,
+            icon: 'https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=128&auto=format&fit=crop'
+          });
+        } catch (e) {
+          console.warn('Error launching native notification:', e);
+        }
+      }
+    }
 
     // Initialize SVG dasharray
     progressCircle.style.strokeDasharray = `${CIRCLE_CIRCUMFERENCE} ${CIRCLE_CIRCUMFERENCE}`;
@@ -530,7 +679,8 @@
       const formatted = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
       const modeLabel = modeConfigs[state.mode].name;
       const icon = state.isRunning ? '▶' : '⏸';
-      document.title = `${icon} ${formatted} - ${modeLabel} | FocusFlow`;
+      const taskSuffix = state.currentTask.trim() ? ` · ${state.currentTask.trim()}` : '';
+      document.title = `${icon} ${formatted} - ${modeLabel}${taskSuffix} | FocusFlow`;
     }
 
     // Format & Render Time Display
@@ -540,11 +690,18 @@
       timeDisplay.textContent = `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 
       // Update Circle Progress
-      const fractionRemaining = state.timeLeft / state.totalTime;
+      const fractionRemaining = state.totalTime > 0 ? (state.timeLeft / state.totalTime) : 0;
       const offset = CIRCLE_CIRCUMFERENCE - (fractionRemaining * CIRCLE_CIRCUMFERENCE);
       progressCircle.style.strokeDashoffset = offset;
 
       updateDocumentTitle();
+    }
+
+    // Render Stats to DOM
+    function renderStats() {
+      statPomodoros.textContent = state.stats.pomodoros;
+      statShortBreaks.textContent = state.stats.shortBreaks;
+      statLongBreaks.textContent = state.stats.longBreaks;
     }
 
     // Render Cycle Dots (1 through 4)
@@ -584,9 +741,9 @@
       Object.keys(modeButtons).forEach(m => {
         const btn = modeButtons[m];
         if (m === state.mode) {
-          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 accent-btn-active';
+          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold transition-all duration-300 flex items-center justify-center gap-2 accent-btn-active focus:ring-2 focus:ring-emerald-400 focus:outline-none';
         } else {
-          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2';
+          btn.className = 'flex-1 py-2.5 px-3 rounded-xl text-xs md:text-sm font-semibold text-slate-400 hover:text-slate-200 hover:bg-white/5 transition-all duration-300 flex items-center justify-center gap-2 focus:ring-2 focus:ring-emerald-400 focus:outline-none';
         }
       });
 
@@ -599,10 +756,12 @@
       } else {
         timerStatusText.textContent = config.statusText;
       }
+
+      updateTaskUI();
     }
 
     // Switch Timer Mode
-    function switchMode(newMode, shouldAutoStart = false) {
+    function switchMode(newMode, triggerAutoStart = false) {
       clearInterval(state.timerInterval);
       state.isRunning = false;
       state.mode = newMode;
@@ -621,7 +780,8 @@
       const container = document.getElementById('timer-display-container');
       container.classList.remove('timer-running-pulse');
 
-      if (shouldAutoStart || state.settings.autoStartNext) {
+      // CRITICAL REQUIREMENT 3: Only auto-start if settings.autoStartNext is explicitly true
+      if (triggerAutoStart && state.settings.autoStartNext === true) {
         startTimer();
       }
     }
@@ -635,23 +795,35 @@
       }
     }
 
+    // CRITICAL REQUIREMENT 4: Timestamp-based Date.now() accurate countdown
     function startTimer() {
       if (state.isRunning) return;
+
+      // Request browser notification permissions opportunistically on first start if enabled
+      if (state.settings.notificationsEnabled && 'Notification' in window && Notification.permission === 'default') {
+        requestNotificationPermission();
+      }
+
       state.isRunning = true;
+      state.endTime = Date.now() + (state.timeLeft * 1000);
+
       updatePlayButtonUI();
       timerStatusText.textContent = modeConfigs[state.mode].statusText;
 
       const container = document.getElementById('timer-display-container');
       container.classList.add('timer-running-pulse');
 
+      clearInterval(state.timerInterval);
       state.timerInterval = setInterval(() => {
-        if (state.timeLeft > 0) {
-          state.timeLeft--;
-          renderTime();
-        } else {
+        const remaining = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
+        state.timeLeft = remaining;
+        renderTime();
+
+        if (remaining <= 0) {
+          clearInterval(state.timerInterval);
           handlePhaseComplete();
         }
-      }, 1000);
+      }, 250);
     }
 
     function pauseTimer() {
@@ -668,6 +840,7 @@
     function resetTimer() {
       clearInterval(state.timerInterval);
       state.isRunning = false;
+      state.endTime = null;
 
       let minutes = state.settings.focusMinutes;
       if (state.mode === 'shortBreak') minutes = state.settings.shortBreakMinutes;
@@ -695,35 +868,55 @@
       lucide.createIcons();
     }
 
-    // Timer Completed Event Handler
+    // Timer Completed Event Handler with Native Notifications
     function handlePhaseComplete() {
       clearInterval(state.timerInterval);
       state.isRunning = false;
       playHarmonicChime();
 
+      const taskDetail = state.currentTask.trim() ? ` en "${state.currentTask.trim()}"` : '';
+
       if (state.mode === 'focus') {
         state.stats.pomodoros++;
-        statPomodoros.textContent = state.stats.pomodoros;
-
         // Check if 4 Pomodoro cycle is reached
         if (state.cycleCount >= 4) {
-          // Finished full cycle -> Long Break
+          triggerNativeNotification(
+            '¡Ciclo completado! 🎉',
+            `Has terminado 4 pomodoros${taskDetail}. Es momento de un merecido Descanso Largo (15 min).`
+          );
           state.cycleCount = 1;
+          saveStatsToLocalStorage();
+          renderStats();
           renderCycleDots();
           switchMode('longBreak', true);
         } else {
-          // Go to short break and advance cycle
+          triggerNativeNotification(
+            '¡Pomodoro finalizado! ☕',
+            `Buen trabajo${taskDetail}. Tómate un descanso corto de 5 minutos.`
+          );
           state.cycleCount++;
+          saveStatsToLocalStorage();
+          renderStats();
           renderCycleDots();
           switchMode('shortBreak', true);
         }
       } else if (state.mode === 'shortBreak') {
         state.stats.shortBreaks++;
-        statShortBreaks.textContent = state.stats.shortBreaks;
+        triggerNativeNotification(
+          'Descanso finalizado 🎯',
+          `¿Listo para volver al trabajo? Inicia tu siguiente sesión de concentración.`
+        );
+        saveStatsToLocalStorage();
+        renderStats();
         switchMode('focus', true);
       } else if (state.mode === 'longBreak') {
         state.stats.longBreaks++;
-        statLongBreaks.textContent = state.stats.longBreaks;
+        triggerNativeNotification(
+          'Descanso largo finalizado ⚡',
+          `Baterías recargadas. Comienza un nuevo ciclo con máxima energía.`
+        );
+        saveStatsToLocalStorage();
+        renderStats();
         switchMode('focus', true);
       }
     }
@@ -734,10 +927,12 @@
         if (state.mode === 'focus') {
           if (state.cycleCount >= 4) {
             state.cycleCount = 1;
+            saveStatsToLocalStorage();
             renderCycleDots();
             switchMode('longBreak', false);
           } else {
             state.cycleCount++;
+            saveStatsToLocalStorage();
             renderCycleDots();
             switchMode('shortBreak', false);
           }
@@ -755,14 +950,26 @@
         state.stats.longBreaks = 0;
         state.cycleCount = 1;
 
-        statPomodoros.textContent = '0';
-        statShortBreaks.textContent = '0';
-        statLongBreaks.textContent = '0';
+        saveStatsToLocalStorage();
+        renderStats();
         renderCycleDots();
       }
     }
 
-    // Settings Modal Logic
+    // Visibility change sync for background tab accuracy
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden && state.isRunning && state.endTime) {
+        const remaining = Math.max(0, Math.round((state.endTime - Date.now()) / 1000));
+        state.timeLeft = remaining;
+        renderTime();
+        if (remaining <= 0) {
+          clearInterval(state.timerInterval);
+          handlePhaseComplete();
+        }
+      }
+    });
+
+    // Settings Modal Logic & Accessibility
     settingsBtn.addEventListener('click', () => {
       inputFocus.value = state.settings.focusMinutes;
       inputShort.value = state.settings.shortBreakMinutes;
@@ -771,15 +978,20 @@
       displaySetShort.textContent = `${state.settings.shortBreakMinutes} min`;
       displaySetLong.textContent = `${state.settings.longBreakMinutes} min`;
       soundCheckbox.checked = state.settings.soundEnabled;
+      notificationsCheckbox.checked = state.settings.notificationsEnabled;
       autostartCheckbox.checked = state.settings.autoStartNext;
 
       settingsModal.classList.remove('hidden');
       settingsModal.classList.add('flex');
+      settingsModal.setAttribute('aria-hidden', 'false');
+      closeModalBtn.focus();
     });
 
     function closeSettingsModal() {
       settingsModal.classList.add('hidden');
       settingsModal.classList.remove('flex');
+      settingsModal.setAttribute('aria-hidden', 'true');
+      settingsBtn.focus();
     }
 
     closeModalBtn.addEventListener('click', closeSettingsModal);
@@ -795,12 +1007,26 @@
       displaySetLong.textContent = `${e.target.value} min`;
     });
 
+    notificationsCheckbox.addEventListener('change', async (e) => {
+      if (e.target.checked) {
+        const granted = await requestNotificationPermission();
+        if (!granted) {
+          alert('Por favor autoriza las notificaciones en la barra de tu navegador para habilitar esta opción.');
+          e.target.checked = false;
+        }
+      }
+    });
+
     btnSaveSettings.addEventListener('click', () => {
       state.settings.focusMinutes = parseInt(inputFocus.value, 10);
       state.settings.shortBreakMinutes = parseInt(inputShort.value, 10);
       state.settings.longBreakMinutes = parseInt(inputLong.value, 10);
       state.settings.soundEnabled = soundCheckbox.checked;
+      state.settings.notificationsEnabled = notificationsCheckbox.checked;
       state.settings.autoStartNext = autostartCheckbox.checked;
+
+      // Save to localStorage immediately
+      saveSettingsToLocalStorage();
 
       // Update sound quick icon
       updateSoundIconUI();
@@ -816,6 +1042,7 @@
     // Quick Sound Toggle in Header
     soundQuickToggle.addEventListener('click', () => {
       state.settings.soundEnabled = !state.settings.soundEnabled;
+      saveSettingsToLocalStorage();
       updateSoundIconUI();
       if (state.settings.soundEnabled) {
         playHarmonicChime();
@@ -835,9 +1062,15 @@
       lucide.createIcons();
     }
 
-    // Keyboard Shortcuts (Space for Play/Pause, R for Reset)
+    // Keyboard Shortcuts (Space for Play/Pause, R for Reset, Esc for modal)
     window.addEventListener('keydown', (e) => {
-      if (settingsModal.classList.contains('flex')) return; // Ignore if modal open
+      if (!settingsModal.classList.contains('hidden')) {
+        if (e.key === 'Escape') closeSettingsModal();
+        return;
+      }
+      // Don't trigger hotkeys if typing in active task input
+      if (document.activeElement === taskInput) return;
+
       if (e.code === 'Space') {
         e.preventDefault();
         toggleTimer();
@@ -848,12 +1081,18 @@
 
     // Initial setup on load
     window.addEventListener('DOMContentLoaded', () => {
+      loadFromLocalStorage();
+
+      // Set initial timer according to loaded focus setting
+      state.totalTime = state.settings.focusMinutes * 60;
+      state.timeLeft = state.totalTime;
+
       lucide.createIcons();
       applyTheme();
+      renderStats();
       renderCycleDots();
       renderTime();
       updateSoundIconUI();
     });
   </script>
-</body>
-</html>
+</body></html>
