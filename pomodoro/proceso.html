@@ -33,12 +33,12 @@
       <li><span class="ia">ChatGPT:</span> creación de la portada del PDF.</li>
       <li><span class="ia">Gemini:</span> redacción y mejora de los prompts de diseño y funcionalidad, y revisión del código.</li>
       <li><span class="ia">Stitch (Google):</span> generación del prototipo y del código HTML, CSS (Tailwind) y JavaScript.</li>
-      <li><span class="ia">Claude:</span> ayuda para organizar esta página de proceso y la entrega.</li>
+      <li><span class="ia">Claude:</span> ayuda para organizar esta página de proceso y la entrega, y revisión del código del Pomodoro con propuestas de mejora.</li>
     </ul>
     <strong>Enlaces</strong>
     <ul class="enlaces">
       <li><a href="index.html">Aplicación web Pomodoro</a></li>
-      <li><a href="https://github.com/mohaarchi24-hue/2dam2627di">Repositorio de GitHub</a> (si tu repositorio tiene otra URL, cámbiala aquí)</li>
+      <li><a href="https://github.com/mohaarchi24-hue/2dam2627di">Repositorio de GitHub</a></li>
     </ul>
   </div>
 
@@ -47,7 +47,7 @@
     <span class="etiqueta">IA: ChatGPT</span>
     <p>Usé ChatGPT para generar la imagen de la portada del PDF.</p>
     <p><strong>Prompt:</strong></p>
-    <pre>quiero una iagen en vertical para la portada de este trabajo : Realizar una aplicación tipo Pomodoro Proceso de resolución: Prompts e IAs usadas en el  orden aplicado para obtener  las distintas versiones de la app, con  capturas de pantalla del proceso.</pre>
+    <pre>quiero una iagen en vertical para la portada de este trabajo : Realizar una aplicación tipo Pomodoro Proceso de resolución: Prompts e IAs usadas en el  orden aplicado para obtener  las distintas versiones de la app, con  capturas de pantalla del proceso.</pre>
     <figure>
       <img src="00-portada.png" alt="Portada generada por ChatGPT">
       <figcaption>Resultado: portada de la aplicación Pomodoro.</figcaption>
@@ -61,7 +61,7 @@
     <p><strong>Mi prompt a Gemini:</strong></p>
     <pre>vale entonces dame el prompt para hacer el pomodoro en el stitch quiero que sea lo mas completo posible quiero que sea por ejemplo 1 hora, con otro de descansos de 5 minutos y otros mas largos de 15 eso miralo tu pero que sea lo mas completo posible y si hacen falta mas cosas hazlas para que sea mas completo</pre>
     <p><strong>Resultado de Gemini:</strong> me dio un prompt listo para copiar y pegar en Stitch, pensado para devolver todo en un único archivo <code>index.html</code>.</p>
-    <pre>vale entonces dame el prompt para hacer el pomodoro en el stitch quiero que sea lo mas completo posible quiero que sea por ejemplo 1 hora, con otro de descansos de 5 minutos y otros mas largos de 15 eso miralo tu pero que sea lo mas completo posible y si hacen falta mas cosas hazlas para que sea mas completo <pre>
+    <pre>vale entonces dame el prompt para hacer el pomodoro en el stitch quiero que sea lo mas completo posible quiero que sea por ejemplo 1 hora, con otro de descansos de 5 minutos y otros mas largos de 15 eso miralo tu pero que sea lo mas completo posible y si hacen falta mas cosas hazlas para que sea mas completo</pre>
     <figure>
       <img src="01-gemini-pide-prompt.png" alt="Gemini generando el prompt para Stitch">
       <figcaption>Gemini genera el prompt para Stitch.</figcaption>
@@ -83,9 +83,8 @@
     <span class="etiqueta">IA: Gemini</span>
     <p>Le envié el HTML a Gemini para ver si faltaba algo o se podía mejorar.</p>
     <p><strong>Mi pregunta:</strong></p>
-    <pre>esto es lo que me ha echo, crees que se podria mejorar algo con otro prompt o asi esat bien ?</pre>
+    <pre>esto es lo que me ha echo, crees que se podria mejorar algo con otro prompt o asi esat bien ? (y le he puesto el html entero)</pre>
     <p><strong>Resultado de Gemini:</strong> dijo que el código estaba muy completo (temporizador circular, modos de concentración y descansos, contadores, selector de ciclos, ajustes y sonido con la API Web Audio). Solo señaló un detalle: la imagen de fondo apuntaba a un marcador de posición de Google (<code>stitch-placeholder-300x300.svg</code>). Además me dio dos prompts de mejora opcionales.</p>
-    <pre>esto es lo que me ha echo, crees que se podría mejorar algo con otro prompt o asi esat bien ? (y le he puesto el html entero) </pre>
     <figure>
       <img src="03-gemini-revisa-html-y-mejoras.png" alt="Gemini revisando el HTML y proponiendo mejoras">
       <figcaption>Gemini revisa el código y propone prompts de mejora.</figcaption>
@@ -122,7 +121,7 @@ que tenga algun fondo (no se de que di tu uno bueno)</pre>
       <figcaption>Gemini genera el HTML con los prompts.</figcaption>
     </figure>
     <figure>
-      <img src="capturas/07-pagina-prompts-en-local.png" alt="Primera versión de la página de prompts abierta en el navegador">
+      <img src="07-pagina-prompts-en-local.png" alt="Primera versión de la página de prompts abierta en el navegador">
       <figcaption>Primera versión de la página de prompts abierta en el navegador (solo tenía los prompts).</figcaption>
     </figure>
   </div>
@@ -139,7 +138,108 @@ que tenga algun fondo (no se de que di tu uno bueno)</pre>
     <figure>
       <img src="08-claude.png" alt="Conversación con Claude">
       <img src="09-claude.png" alt="Conversación con Claude">
-      <figcaption>Conversación con Claude (captura de esta charla).</figcaption>
+      <figcaption>Conversación con Claude sobre cómo corregir la entrega.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 8 · Pedir a Claude que revise el Pomodoro</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Claude</span>
+    <p>Una vez arreglada la entrega, le pasé a Claude el <code>index.html</code> del Pomodoro y le pregunté si faltaba algo importante o si se podía mejorar.</p>
+    <p><strong>Mi pregunta:</strong></p>
+    <pre>El problema que tuve lo arregle, solo tenía que hacer otra modificacion y ya se fue, ahora quiero que mires el pomodoro que tengo, crees que hay algo importante que me falte? o cosas por mejorar</pre>
+    <p><strong>Resultado de Claude:</strong> dijo que la app estaba bastante completa y me señaló mejoras por orden de importancia:</p>
+    <ul>
+      <li>El fondo no era una imagen real: usaba el marcador de posición <code>stitch-placeholder-300x300.svg</code>.</li>
+      <li>El interruptor «Inicio Automático» no funcionaba bien: la función <code>handlePhaseComplete</code> siempre arrancaba la siguiente fase sola.</li>
+      <li>El tiempo se descuadraba al cambiar de pestaña, porque la cuenta atrás se hacía solo con <code>setInterval</code>.</li>
+      <li>No se guardaba nada al recargar la página (ajustes y estadísticas).</li>
+      <li>Opcionales: notificación del navegador, campo para la tarea actual, textos de estado, accesibilidad y fijar la versión de Lucide.</li>
+    </ul>
+    <figure>
+      <img src="10-claude-revision-pomodoro.png" alt="Claude revisando el Pomodoro y proponiendo mejoras">
+      <figcaption>Claude revisa el código del Pomodoro y lista las mejoras.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 9 · Pedir a Gemini un prompt mejorado para Stitch</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Claude + Gemini</span>
+    <p>Preferí corregir la app con un prompt para Stitch en lugar de editar el código a mano. Claude me preguntó si Gemini podría mejorar el prompt y me dio un texto para pedírselo.</p>
+    <p><strong>Mi pregunta a Claude:</strong></p>
+    <pre>prefiero el prompt para stitch, crees que gemini podria mejorarlo?</pre>
+    <figure>
+      <img src="11-claude-prompt-para-gemini.png" alt="Claude propone cómo pedirle el prompt a Gemini">
+      <figcaption>Claude me da el texto para pedirle a Gemini que mejore el prompt.</figcaption>
+    </figure>
+    <p><strong>Prompt que le di a Gemini:</strong></p>
+    <pre>Tengo una app Pomodoro hecha con Stitch (HTML, Tailwind y JavaScript en un solo archivo). Quiero un prompt para pedirle a Stitch estas mejoras SIN cambiar el diseño actual:
+1. Fondo real (imagen de Unsplash minimalista y oscura, o degradado)
+2. Arreglar el interruptor "Inicio Automático", que ahora siempre arranca solo
+3. Que el tiempo no se descuadre si cambio de pestaña
+4. Guardar ajustes y estadísticas al recargar
+5. Notificación del navegador al terminar cada fase
+6. Campo para escribir la tarea actual
+7. Mejorar accesibilidad y fijar la versión de Lucide
+Hazlo claro y ordenado, indica qué debe mantenerse igual, y que Stitch devuelva todo en un único index.html.
+Mejorame este prompt si puedes</pre>
+    <p><strong>Resultado de Gemini:</strong> un prompt perfeccionado y estructurado para pasárselo a Stitch, diseñado para que respete el diseño actual y aplique solo las correcciones y funciones nuevas en un único <code>index.html</code>.</p>
+    <figure>
+      <img src="12-gemini-mejora-prompt.png" alt="Gemini devuelve el prompt perfeccionado">
+      <figcaption>Gemini devuelve el prompt perfeccionado para Stitch.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 10 · Revisar el prompt de Gemini con Claude</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Claude</span>
+    <p>Antes de usarlo en Stitch, le pasé a Claude el prompt que me dio Gemini para ver si estaba bien.</p>
+    <p><strong>Mi pregunta:</strong></p>
+    <pre>esta bien?</pre>
+    <p><strong>Resultado de Claude:</strong> dijo que el prompt estaba bien y me recomendó 4 cambios pequeños: quitar los corchetes de las URLs (formato Markdown), comprobar que la foto de Unsplash carga, corregir la errata «Lógico» por «Lógica» y pedir explícitamente que devolviera el código completo en un único <code>index.html</code>.</p>
+    <p><strong>Prompt final enviado a Stitch (el de Gemini con esos cambios):</strong></p>
+    <pre>Tengo una aplicación web Pomodoro desarrollada en un único archivo `index.html` (usando HTML, Tailwind CSS, Lucide Icons y JavaScript). Necesito que actualices el código para aplicar varias mejoras funcionales y corregir algunos fallos de lógica.
+
+REGLA FUNDAMENTAL: Conserva intacta la interfaz visual actual (estructura HTML, clases de Tailwind, efecto glassmorphism, tipografías, botones, animaciones y paleta de colores). NO rediseñes la app; mantén el diseño existente y limita los cambios a las mejoras solicitadas a continuación.
+
+Lista de Mejoras y Correcciones:
+
+1. Fondo e Interfaz:
+   * Sustituye la URL actual del placeholder de imagen por una fotografía real de alta calidad de Unsplash sobre un espacio de trabajo acogedor y oscuro (ejemplo: https://images.unsplash.com/photo-1499750310107-5fef28a66643?q=80&w=1920&auto=format&fit=crop), manteniendo los overlays oscuros y la transparencia para no perder legibilidad.
+
+2. Corrección de la lógica de "Inicio Automático":
+   * Arregla el comportamiento del interruptor de inicio automático (Auto Start). La cuenta atrás NO debe iniciarse sola al cambiar de fase a menos que el usuario tenga esta opción explícitamente activada en el panel de ajustes.
+
+3. Precisión del Temporizador (Segundo plano):
+   * Reescribe la lógica de la cuenta atrás basada en marcas de tiempo (`Date.now()` / timestamp final) en lugar de depender únicamente de `setInterval(1000)`. Esto evita que el temporizador se desincronice o se pause cuando el usuario cambia de pestaña en el navegador.
+
+4. Persistencia de Datos (`localStorage`):
+   * Guarda en `localStorage` las estadísticas acumuladas (pomodoros, descansos cortos y descansos largos completados) y las preferencias del panel de ajustes (duraciones de tiempo, estado del sonido e inicio automático) para que se mantengan al recargar o cerrar la página.
+
+5. Notificaciones Nativas del Navegador:
+   * Integra la API de Notificaciones del navegador (`Notification.requestPermission()`). Al finalizar cada fase (concentración o descanso), emite una notificación nativa además del sonido actual.
+
+6. Input de Tarea Activa:
+   * Añade un campo de texto estilizado (integrado elegantemente en el diseño actual) donde el usuario pueda escribir su "Tarea actual" en la que está trabajando, mostrándola claramente sobre el temporizador o en la tarjeta principal.
+
+7. Accesibilidad y Librerías:
+   * Fija la versión de la librería Lucide Icons cargando una versión estable concreta mediante CDN (por ejemplo: https://unpkg.com/lucide@0.344.0/dist/umd/lucide.min.js).
+   * Mejora los atributos de accesibilidad (`aria-label`, `role="dialog"`, `aria-hidden` en el modal de ajustes, y estados focales adecuados).
+
+Entrega ÚNICAMENTE el código completo en un solo bloque de código HTML, listo para copiar y reemplazar directamente en el archivo index.html.</pre>
+    <figure>
+      <img src="13-claude-revisa-prompt.png" alt="Claude revisando el prompt de Gemini">
+      <figcaption>Claude revisa el prompt de Gemini y propone 4 cambios.</figcaption>
+    </figure>
+  </div>
+
+  <h2>Paso 11 · Aplicar el prompt mejorado en Stitch</h2>
+  <div class="caja">
+    <span class="etiqueta">IA: Stitch</span>
+    <p>Pegué el prompt final en Stitch. Stitch empezó a actualizar FocusFlow Pomodoro Pro con precisión por <em>timestamps</em> (<code>Date.now()</code>), notificaciones del navegador, el campo de tarea activa y persistencia completa, y creó una nueva versión llamada <strong>«FocusFlow Pomodoro Pro - Con Fondo Unsplash y Persistencia»</strong>. En la vista previa ya aparece el campo «¿En qué estás trabajando ahora?» sobre el temporizador y el estado «Listo para empezar».</p>
+    <figure>
+      <img src="14-stitch-version-mejorada.png" alt="Stitch generando la versión mejorada">
+      <figcaption>Stitch genera la versión mejorada del Pomodoro.</figcaption>
     </figure>
   </div>
 
