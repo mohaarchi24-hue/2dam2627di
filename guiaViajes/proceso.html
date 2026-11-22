@@ -1,1 +1,1026 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Proceso · Marruecos Explorer</title>
+<meta name="description" content="Documentación del proceso de creación de Marruecos Explorer: capturas y prompts usados con Gemini, ChatGPT, Claude y Stitch AI.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #f8f1e3; --bg-soft: #f1e6cf; --surface: #ffffff; --surface-2: #fbf5e9;
+    --text: #2a1d17; --muted: #7a6a5c;
+    --accent: #c1272d; --accent-hover: #9e1f24; --accent-soft: #f8dfdc;
+    --green: #006233; --green-soft: #d8eadf;
+    --border: #eadcc3;
+    --shadow: 0 10px 30px rgba(110, 40, 30, .13); --shadow-sm: 0 3px 10px rgba(110, 40, 30, .10);
+    --nav-bg: rgba(248, 241, 227, .88);
+    --code-bg: #fbf5e9;
+    --gemini: #4a7bd8; --chatgpt: #0d8f6f; --claude: #c1642d; --stitch: #7a5bd1;
+  }
+  html.dark {
+    --bg: #07201a; --bg-soft: #0a2a22; --surface: #0f2f27; --surface-2: #0c2822;
+    --text: #f4ecd8; --muted: #9dbbb0;
+    --accent: #e0474d; --accent-hover: #f06469; --accent-soft: #3a2326;
+    --green: #5fd19a; --green-soft: #12402f;
+    --border: #1d4a3d;
+    --shadow: 0 10px 30px rgba(0,0,0,.5); --shadow-sm: 0 3px 10px rgba(0,0,0,.4);
+    --nav-bg: rgba(7, 32, 26, .9);
+    --code-bg: #0a2820;
+    --gemini: #8fb2f5; --chatgpt: #52d1ae; --claude: #f0a070; --stitch: #b7a2f5;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0; font-family: 'Inter', system-ui, sans-serif; background: var(--bg); color: var(--text);
+    transition: background-color .35s ease, color .35s ease; overflow-x: hidden; line-height: 1.55;
+    -webkit-tap-highlight-color: transparent;
+  }
+  h1, h2, h3 { font-family: 'Fraunces', Georgia, serif; margin: 0; line-height: 1.15; }
+  p { margin: 0; }
+  a { color: inherit; text-decoration: none; }
+  button { font-family: inherit; cursor: pointer; }
+  .wrap { max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+  .muted { color: var(--muted); }
+  .eyebrow { font-size: .75rem; font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--accent); }
 
+  /* Cabecera */
+  .topbar {
+    position: sticky; top: 0; z-index: 50; background: var(--nav-bg); border-bottom: 1px solid var(--border);
+    backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  }
+  .topbar .wrap { height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand-logo {
+    width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center;
+    color: #fff; background: linear-gradient(135deg, #c1272d, #8a1a20); box-shadow: var(--shadow-sm);
+  }
+  .brand-name { font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.15rem; line-height: 1; display: block; }
+  .brand-sub { font-size: 10.5px; font-weight: 700; letter-spacing: .26em; text-transform: uppercase; color: var(--accent); display: block; margin-top: 3px; }
+  .actions { display: flex; align-items: center; gap: 8px; }
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center; gap: .45rem; min-height: 42px; padding: 0 1.1rem;
+    border-radius: 999px; font-weight: 600; font-size: .9rem; border: 1px solid var(--border);
+    background: var(--surface); color: var(--text); transition: all .2s ease;
+  }
+  .btn:hover { border-color: var(--accent); color: var(--accent); transform: translateY(-1px); }
+  .btn-primary { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: var(--shadow-sm); }
+  .btn-primary:hover { background: var(--accent-hover); border-color: var(--accent-hover); color: #fff; }
+  .icon-btn {
+    width: 42px; height: 42px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+    background: var(--surface); border: 1px solid var(--border); color: var(--text); transition: all .2s ease;
+  }
+  .icon-btn:hover { border-color: var(--accent); color: var(--accent); transform: rotate(8deg); }
+  .hidden { display: none !important; }
+  :focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
+
+  /* Hero */
+  .hero {
+    margin-top: 22px; border-radius: 28px; overflow: hidden; position: relative; color: #fff; padding: 56px 32px;
+    background: linear-gradient(135deg, #c1272d 0%, #8a1a20 45%, #006233 100%); box-shadow: var(--shadow);
+  }
+  .hero::before {
+    content: ''; position: absolute; inset: 0; opacity: .18;
+    background-image: radial-gradient(circle at 25% 25%, #fff 2px, transparent 3px), radial-gradient(circle at 75% 75%, #fff 2px, transparent 3px);
+    background-size: 30px 30px;
+  }
+  .hero > * { position: relative; }
+  .hero .pill {
+    display: inline-flex; align-items: center; gap: 8px; font-size: .75rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
+    background: rgba(255,255,255,.16); padding: 6px 14px; border-radius: 999px;
+  }
+  .hero h1 { font-size: clamp(2.1rem, 6vw, 3.8rem); font-weight: 800; margin-top: 18px; max-width: 720px; }
+  .hero h1 span { color: #f2c46a; }
+  .hero p.lead { margin-top: 14px; max-width: 620px; color: rgba(255,255,255,.92); font-size: 1.05rem; }
+  .stats { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 28px; }
+  .stat { background: rgba(255,255,255,.14); border: 1px solid rgba(255,255,255,.25); border-radius: 18px; padding: 12px 20px; min-width: 120px; }
+  .stat b { display: block; font-family: 'Fraunces', serif; font-size: 1.9rem; line-height: 1; }
+  .stat span { font-size: .8rem; opacity: .9; }
+
+  /* Secciones */
+  section.block { margin-top: 56px; }
+  .block-head { margin-bottom: 22px; }
+  .block-head h2 { font-size: clamp(1.6rem, 4vw, 2.2rem); margin-top: 6px; }
+  .block-head p { margin-top: 8px; max-width: 640px; }
+
+  /* Tarjetas de IAs */
+  .ia-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 640px) { .ia-grid { grid-template-columns: repeat(2, 1fr); } }
+  @media (min-width: 1024px) { .ia-grid { grid-template-columns: repeat(4, 1fr); } }
+  .ia-card {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 20px; box-shadow: var(--shadow-sm);
+    border-top: 5px solid var(--c); transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .ia-card:hover { transform: translateY(-5px); box-shadow: var(--shadow); }
+  .ia-card h3 { font-size: 1.25rem; color: var(--c); }
+  .ia-card .role { font-size: .85rem; margin-top: 6px; }
+  .ia-card .count { margin-top: 12px; font-size: .78rem; font-weight: 700; color: var(--muted); }
+  .gemini { --c: var(--gemini); } .chatgpt { --c: var(--chatgpt); } .claude { --c: var(--claude); } .stitch { --c: var(--stitch); }
+
+  /* Filtros */
+  .filters { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; margin-bottom: 26px; }
+  .filters::-webkit-scrollbar { display: none; }
+  .chip {
+    flex: 0 0 auto; min-height: 42px; padding: 0 1.1rem; border-radius: 999px; font-weight: 600; font-size: .9rem;
+    background: var(--surface); border: 1px solid var(--border); color: var(--muted); transition: all .2s ease;
+  }
+  .chip:hover { color: var(--text); border-color: var(--accent); }
+  .chip.active { background: var(--accent); border-color: var(--accent); color: #fff; box-shadow: var(--shadow-sm); }
+
+  /* Línea de tiempo */
+  .timeline { position: relative; display: grid; gap: 26px; }
+  .step {
+    background: var(--surface); border: 1px solid var(--border); border-radius: 26px; padding: 22px; box-shadow: var(--shadow-sm);
+    display: grid; gap: 22px; grid-template-columns: 1fr; animation: rise .5s ease both;
+  }
+  @media (min-width: 900px) { .step { grid-template-columns: 1.05fr 1fr; padding: 28px; gap: 30px; } }
+  @keyframes rise { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: none; } }
+  .step.out { display: none; }
+  .step-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; }
+  .num {
+    width: 42px; height: 42px; border-radius: 50%; display: flex; align-items: center; justify-content: center; flex: 0 0 auto;
+    background: var(--accent); color: #fff; font-family: 'Fraunces', serif; font-weight: 700; font-size: 1.1rem;
+  }
+  .badge {
+    font-size: .72rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; padding: 5px 12px; border-radius: 999px;
+    color: var(--c); background: color-mix(in srgb, var(--c) 14%, transparent); border: 1px solid color-mix(in srgb, var(--c) 45%, transparent);
+  }
+  .badge.pending { color: var(--muted); background: transparent; border-style: dashed; border-color: var(--muted); }
+  .step h3 { font-size: 1.45rem; margin-top: 14px; }
+  .step .goal { margin-top: 8px; color: var(--muted); }
+  .label { font-size: .72rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-top: 18px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .prompt {
+    margin-top: 8px; background: var(--code-bg); border: 1px solid var(--border); border-left: 4px solid var(--c);
+    border-radius: 14px; padding: 14px 16px; font-size: .9rem; white-space: pre-wrap; word-wrap: break-word; overflow-wrap: anywhere;
+    max-height: 260px; overflow: auto; font-family: 'Inter', sans-serif;
+  }
+  .copy {
+    min-height: 32px; padding: 0 12px; border-radius: 999px; font-size: .75rem; font-weight: 600;
+    background: var(--surface); color: var(--text); border: 1px solid var(--border); transition: all .2s ease;
+  }
+  .copy:hover { border-color: var(--accent); color: var(--accent); }
+  .copy.done { background: var(--green); color: #fff; border-color: var(--green); }
+  details.full { margin-top: 12px; }
+  details.full summary { cursor: pointer; font-weight: 600; font-size: .9rem; color: var(--accent); list-style: none; display: inline-flex; align-items: center; gap: 6px; }
+  details.full summary::-webkit-details-marker { display: none; }
+  details.full summary::before { content: '▸'; transition: transform .2s ease; }
+  details.full[open] summary::before { transform: rotate(90deg); }
+  details.full .prompt { max-height: 420px; }
+  .note { margin-top: 14px; font-size: .88rem; background: var(--accent-soft); border-radius: 12px; padding: 10px 14px; }
+
+  /* Capturas */
+  figure { margin: 0; align-self: start; }
+  .shot {
+    position: relative; display: block; width: 100%; border-radius: 18px; overflow: hidden; border: 1px solid var(--border);
+    background: var(--surface-2); box-shadow: var(--shadow-sm); cursor: zoom-in; padding: 0; transition: transform .3s ease, box-shadow .3s ease;
+  }
+  .shot:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+  .shot img { display: block; width: 100%; height: auto; }
+  .shot .zoom {
+    position: absolute; right: 10px; bottom: 10px; background: rgba(0,0,0,.65); color: #fff; font-size: .72rem; font-weight: 600;
+    padding: 5px 10px; border-radius: 999px;
+  }
+  .shot.missing { cursor: default; min-height: 220px; border: 2px dashed var(--border); display: flex; align-items: center; justify-content: center; text-align: center; padding: 24px; }
+  .shot.missing:hover { transform: none; box-shadow: var(--shadow-sm); }
+  .shot.missing img, .shot.missing .zoom { display: none; }
+  .shot .ph { display: none; }
+  .shot.missing .ph { display: block; }
+  .ph b { display: block; font-family: 'Fraunces', serif; font-size: 1.1rem; }
+  .ph code { display: inline-block; margin-top: 8px; background: var(--code-bg); border: 1px solid var(--border); padding: 3px 10px; border-radius: 8px; font-size: .8rem; }
+  figcaption { margin-top: 8px; font-size: .8rem; color: var(--muted); text-align: center; }
+
+  .empty { text-align: center; padding: 40px 20px; border: 2px dashed var(--border); border-radius: 22px; color: var(--muted); }
+
+  /* Conclusiones */
+  .learn-grid { display: grid; gap: 16px; grid-template-columns: 1fr; }
+  @media (min-width: 720px) { .learn-grid { grid-template-columns: repeat(3, 1fr); } }
+  .learn { background: var(--surface); border: 1px solid var(--border); border-radius: 22px; padding: 22px; box-shadow: var(--shadow-sm); }
+  .learn .ico { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: var(--green-soft); color: var(--green); font-size: 1.3rem; }
+  .learn h3 { font-size: 1.15rem; margin-top: 14px; }
+  .learn p { margin-top: 8px; font-size: .92rem; color: var(--muted); }
+
+  footer { margin: 64px 0 40px; padding-top: 26px; border-top: 1px solid var(--border); text-align: center; font-size: .88rem; color: var(--muted); }
+  footer b { font-family: 'Fraunces', serif; font-size: 1.1rem; color: var(--text); }
+
+  /* Lightbox */
+  .lightbox {
+    position: fixed; inset: 0; z-index: 100; background: rgba(0,0,0,.88); display: none; align-items: center; justify-content: center; padding: 20px;
+  }
+  .lightbox.open { display: flex; animation: fade .25s ease; }
+  @keyframes fade { from { opacity: 0; } to { opacity: 1; } }
+  .lightbox img { max-width: 100%; max-height: 90vh; border-radius: 12px; box-shadow: 0 20px 60px rgba(0,0,0,.6); }
+  .lightbox .close { position: absolute; top: 16px; right: 16px; background: #fff; color: #000; border: none; width: 44px; height: 44px; border-radius: 50%; font-size: 1.3rem; font-weight: 700; }
+
+  .toast {
+    position: fixed; left: 50%; bottom: 28px; transform: translate(-50%, 20px); background: #2a1d17; color: #fff; padding: 10px 20px; border-radius: 999px;
+    font-size: .88rem; font-weight: 600; opacity: 0; pointer-events: none; transition: all .3s ease; z-index: 120;
+  }
+  html.dark .toast { background: #f4ecd8; color: #07201a; }
+  .toast.show { opacity: 1; transform: translate(-50%, 0); }
+
+  @media (max-width: 520px) { .hero { padding: 40px 22px; } .brand-sub { display: none; } .btn .t { display: none; } }
+  @media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation-duration: .01ms !important; transition-duration: .01ms !important; } }
+</style>
+</head>
+<body>
+
+<header class="topbar">
+  <div class="wrap">
+    <a href="#inicio" class="brand" aria-label="Proceso de Marruecos Explorer">
+      <span class="brand-logo">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M4 21V11a8 8 0 0 1 16 0v10"/><path d="M9 21v-6a3 3 0 0 1 6 0v6"/><path d="M12 3v2"/></svg>
+      </span>
+      <span><span class="brand-name">Marruecos Explorer</span><span class="brand-sub">Proceso</span></span>
+    </a>
+    <div class="actions">
+      <a class="btn btn-primary" href="index.html">← <span class="t">Ver la app</span></a>
+      <button id="theme-toggle" class="icon-btn" aria-label="Cambiar entre modo claro y oscuro" title="Cambiar tema">
+        <svg id="icon-moon" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg id="icon-sun" class="hidden" viewBox="0 0 24 24" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/></svg>
+      </button>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="inicio">
+
+  <div class="hero">
+    <span class="pill">Proyecto de Desarrollo de Interfaces</span>
+    <h1>Así creé <span>Marruecos Explorer</span> con varias IAs</h1>
+    <p class="lead">Capturas y prompts de todo el proceso: de la portada del trabajo al prompt final de la web, pasando por los ajustes de imagen y de color.</p>
+    <div class="stats">
+      <div class="stat"><b id="stat-steps">0</b><span>pasos documentados</span></div>
+      <div class="stat"><b>4</b><span>IAs utilizadas</span></div>
+      <div class="stat"><b>1</b><span>archivo HTML final</span></div>
+    </div>
+  </div>
+
+  <section class="block" id="ias">
+    <div class="block-head">
+      <p class="eyebrow">Herramientas</p>
+      <h2>Qué hizo cada IA</h2>
+      <p class="muted">Cada una se usó para una parte distinta del proyecto.</p>
+    </div>
+    <div class="ia-grid">
+      <article class="ia-card gemini">
+        <h3>Gemini</h3>
+        <p class="role">Pensar los prompts: la portada vertical y las opciones que añadir a la web.</p>
+        <p class="count" data-count="gemini"></p>
+      </article>
+      <article class="ia-card chatgpt">
+        <h3>ChatGPT</h3>
+        <p class="role">Redactar el prompt para la portada, el prompt completo de la web y cambiar la imagen de Chefchaouen.</p>
+        <p class="count" data-count="chatgpt"></p>
+      </article>
+      <article class="ia-card claude">
+        <h3>Claude</h3>
+        <p class="role">Construir la web completa en un único HTML, ajustar los colores y crear esta página.</p>
+        <p class="count" data-count="claude"></p>
+      </article>
+      <article class="ia-card stitch">
+        <h3>Stitch AI</h3>
+        <p class="role">Prevista para diseñar pantallas. Capturas pendientes de añadir.</p>
+        <p class="count" data-count="stitch"></p>
+      </article>
+    </div>
+  </section>
+
+  <section class="block" id="pasos">
+    <div class="block-head">
+      <p class="eyebrow">Paso a paso</p>
+      <h2>Línea de tiempo del proceso</h2>
+      <p class="muted">Pulsa una captura para verla en grande y usa «Copiar» para llevarte cualquier prompt.</p>
+    </div>
+
+    <div class="filters" id="filters" role="tablist" aria-label="Filtrar por IA">
+      <button class="chip active" data-filter="all" role="tab" aria-selected="true">Todas</button>
+      <button class="chip" data-filter="gemini" role="tab" aria-selected="false">Gemini</button>
+      <button class="chip" data-filter="chatgpt" role="tab" aria-selected="false">ChatGPT</button>
+      <button class="chip" data-filter="claude" role="tab" aria-selected="false">Claude</button>
+      <button class="chip" data-filter="stitch" role="tab" aria-selected="false">Stitch AI</button>
+    </div>
+
+    <div class="timeline" id="timeline">
+
+      <!-- 1 · GEMINI · portada -->
+      <article class="step gemini" data-ai="gemini">
+        <div>
+          <div class="step-head"><span class="num">1</span><span class="badge">Gemini</span></div>
+          <h3>Pedir un prompt para la portada</h3>
+          <p class="goal">Primero necesitaba una portada vertical para el trabajo. Le pedí a Gemini que redactara el prompt para generarla en ChatGPT.</p>
+          <div class="label"><span>Prompt usado</span><button class="copy" type="button">Copiar</button></div>
+          <div class="prompt">dame un prompt para chatgpt para crear una buena portada en vertical para la portada de una tarea que es hacer una guia de viaje que yo quiero hacer de marruecos estas son cosas que se piden :Una especie de guía de viaje, sitios turísticos, restaurantes, deportes, ...
+
+Tiene que tener cambio entre modo claro y oscuro.
+
+Se trata de practicar maquetación, apps multipantalla, cards, transiciones, ...
+lo haré usando diferentes IAs como chatgpt, claude, stitch ai y gemini</div>
+          <p class="note">Gemini respondió con un prompt listo para copiar en el generador de imágenes de ChatGPT.</p>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/01-gemini-prompt-portada.png">
+            <img src="capturas/01-gemini-prompt-portada.png" alt="Captura de Gemini con la petición del prompt para la portada vertical" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Falta la captura</b>Guárdala en:<br><code>capturas/01-gemini-prompt-portada.png</code></span>
+          </button>
+          <figcaption>Gemini · petición del prompt de portada</figcaption>
+        </figure>
+      </article>
+
+      <!-- 2 · CHATGPT · portada -->
+      <article class="step chatgpt" data-ai="chatgpt">
+        <div>
+          <div class="step-head"><span class="num">2</span><span class="badge">ChatGPT</span></div>
+          <h3>Generar la portada con el prompt de Gemini</h3>
+          <p class="goal">Pegué en ChatGPT el prompt que me dio Gemini para crear la ilustración de portada, con el contraste entre modo claro y oscuro.</p>
+          <div class="label"><span>Prompt usado (extracto visible)</span><button class="copy" type="button">Copiar</button></div>
+          <div class="prompt">Crea una ilustración para la portada vertical (formato 2:3) de un proyecto académico de diseño UI/UX sobre una app de guía de viajes de Marruecos.
+
+Composición y estilo:
+
+• Contraste Modo Claro / Modo Oscuro: Divide la escena de forma artística y fluida. En la mitad superior, estética luminosa de día (tonos arena, terracota suave y cielo despejado); en la mitad inferior, estética nocturna elegante (azul noche profundo, sombras suaves y luces cálidas de farolillos marroquíes).
+• Elemento central: Un mockup minimalista de un smartphone flotando en el centro mostrando la interfaz de una app de viajes con tarjetas (cards) modernas que ilustran tres secciones: turismo (arcos de Marrakech o calles azules de Chefchaouen), gastronomía (un tajín tradicional) y deportes de aventura (surf o quads en las dunas del Sáhara).
+• Espacio para texto: Deja la zona superior limpia y despejada con un título minimalista en tipografía sans-serif moderna…</div>
+          <p class="note">El prompt continúa más abajo en la captura; aquí solo está el texto que se ve.</p>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/02-chatgpt-portada.png">
+            <img src="capturas/02-chatgpt-portada.png" alt="Captura de ChatGPT con el prompt de portada pegado" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Falta la captura</b>Guárdala en:<br><code>capturas/02-chatgpt-portada.png</code></span>
+          </button>
+          <figcaption>ChatGPT · chat «Crear portada UI UX»</figcaption>
+        </figure>
+      </article>
+
+      <!-- 3 · GEMINI · opciones -->
+      <article class="step gemini" data-ai="gemini">
+        <div>
+          <div class="step-head"><span class="num">3</span><span class="badge">Gemini</span></div>
+          <h3>Listar las opciones que añadir a la web</h3>
+          <p class="goal">Antes de pedir el prompt de la web, le pedí a Gemini un resumen simple de las funciones que podía incluir, recalcando que la página principal debía ser multiplataforma y responsive.</p>
+          <div class="label"><span>Prompt usado</span><button class="copy" type="button">Copiar</button></div>
+          <div class="prompt">vale solo quiero que me digas que opciones puedo añadir para ponerselo a chatgt para que me de el prompt para claude dimelo de forma simple y sencilla tambien quieor que tenga en cuenta que la página principal es importante que sea multiplataforma y responsive</div>
+          <p class="note">Gemini lo dividió en bloques. El primero, «Contenido extra sobre Marruecos», incluía ciudades clave, riads tradicionales, zocos con conversor de dirhams a euros y frases útiles en darija.</p>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/03-gemini-opciones.png">
+            <img src="capturas/03-gemini-opciones.png" alt="Captura de Gemini con las opciones para añadir al prompt de la web" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Falta la captura</b>Guárdala en:<br><code>capturas/03-gemini-opciones.png</code></span>
+          </button>
+          <figcaption>Gemini · opciones para el prompt de Claude</figcaption>
+        </figure>
+      </article>
+
+      <!-- 4 · CHATGPT · prompt web -->
+      <article class="step chatgpt" data-ai="chatgpt">
+        <div>
+          <div class="step-head"><span class="num">4</span><span class="badge">ChatGPT</span></div>
+          <h3>Redactar el prompt completo para Claude</h3>
+          <p class="goal">Con la lista de Gemini, pedí a ChatGPT que escribiera un buen prompt para que Claude construyera la guía de viajes.</p>
+          <div class="label"><span>Prompt usado (extracto visible)</span><button class="copy" type="button">Copiar</button></div>
+          <div class="prompt">dame un buen prompt para hacer una pagina web en claude sobre una guia de viajes a marruecos estas son algunas de las cosas que quiero que tenga :
+1. Contenido extra sobre Marruecos (para dar variedad a las cards)
+
+• Ciudades clave: Marrakech, Chefchaouen, Fez y Desierto de Merzouga, con etiquetas de tiempo ("Ruta 3 días", "Escapada").
+• Riads tradicionales: Alojamientos con foto, estrellas, precio por noche y barrio.
+• Zocos y compras: Productos típicos (especias, alfombras, cuero) junto a un mini-conversor rápido de Dirhams (MAD) a Euros.
+• Frases útiles: Tarjetas que giran al tocarlas con palabras básicas en darija (Salam, Shukran).
+
+2. Funciones y pantallas
+
+• Filtros en la portada: Barra de búsqueda y botones (Todo, Turismo, Comida, Deportes, Riads) que filtren las cards con una transición suave.
+…</div>
+          <p class="note">El chat se llamó «Prompt web Marruecos Completo». El resultado fue el prompt largo del paso siguiente.</p>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/04-chatgpt-prompt-web.png">
+            <img src="capturas/04-chatgpt-prompt-web.png" alt="Captura de ChatGPT con la petición del prompt completo para la web" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Falta la captura</b>Guárdala en:<br><code>capturas/04-chatgpt-prompt-web.png</code></span>
+          </button>
+          <figcaption>ChatGPT · chat «Prompt web Marruecos Completo»</figcaption>
+        </figure>
+      </article>
+
+      <!-- 5 · CLAUDE · construcción -->
+      <article class="step claude" data-ai="claude">
+        <div>
+          <div class="step-head"><span class="num">5</span><span class="badge">Claude</span></div>
+          <h3>Construir la web completa</h3>
+          <p class="goal">Pegué en Claude el prompt largo generado por ChatGPT. Claude devolvió Marruecos Explorer en un único archivo <b>index.html</b>, con 16 tarjetas, filtros, búsqueda, detalles, favoritos, modo claro y oscuro, conversor y tarjetas de darija.</p>
+          <div class="label"><span>Prompt usado</span><button class="copy" type="button" data-target="p-full">Copiar</button></div>
+          <div class="prompt" style="max-height:140px"># PROMPT: DESARROLLO DE UNA WEB APP PROFESIONAL DE GUÍA DE VIAJES POR MARRUECOS
+
+Actúa como un desarrollador frontend senior especializado en diseño UI/UX, creación de aplicaciones web modernas y experiencias digitales de alta calidad…</div>
+          <details class="full">
+            <summary>Ver el prompt completo</summary>
+<pre class="prompt" id="p-full" style="margin-top:10px"># PROMPT: DESARROLLO DE UNA WEB APP PROFESIONAL DE GUÍA DE VIAJES POR MARRUECOS
+
+Actúa como un desarrollador frontend senior especializado en diseño UI/UX, creación de aplicaciones web modernas y experiencias digitales de alta calidad.
+
+Quiero que desarrolles una **aplicación web completa de guía turística de Marruecos**, con un diseño visual excepcional, moderno, intuitivo y profesional. No quiero una página web genérica ni una simple maqueta: quiero una aplicación interactiva que parezca un producto real, lista para presentar en un proyecto académico de Desarrollo de Interfaces.
+
+## 1. OBJETIVO Y CONCEPTO
+
+La aplicación será una guía digital para personas que quieran viajar y descubrir Marruecos.
+
+Debe permitir explorar ciudades, descubrir lugares turísticos, encontrar restaurantes, conocer actividades y deportes, consultar alojamientos tradicionales, aprender frases básicas y guardar lugares favoritos para organizar una ruta personal.
+
+Toda la interfaz y los contenidos deben estar en **español**.
+
+El nombre de la aplicación será **Marruecos Explorer**. Puedes incorporar un logotipo tipográfico elegante y una identidad visual propia.
+
+## 2. DISEÑO VISUAL Y EXPERIENCIA DE USUARIO (MUY IMPORTANTE)
+
+Quiero un diseño cuidado, moderno y visualmente atractivo, inspirado en aplicaciones profesionales de viajes como Airbnb, Booking o las mejores guías turísticas digitales.
+
+La estética debe transmitir la esencia de Marruecos sin resultar recargada.
+
+**Paleta de colores:**
+
+- Modo claro: fondo color arena o crema, tarjetas blancas, detalles terracota, tonos tierra y pequeños acentos verdes.
+- Modo oscuro: fondo azul noche o azul petróleo muy oscuro, tarjetas ligeramente más claras y detalles dorados o terracota.
+- Tipografía moderna, legible y con buena jerarquía visual.
+- Bordes redondeados, sombras suaves, espacios bien distribuidos y animaciones fluidas.
+- Fotografías grandes y de calidad de Marruecos.
+- Iconos coherentes y minimalistas.
+
+La web debe tener una apariencia premium, con especial atención a los pequeños detalles: botones, estados activos, efectos hover, transiciones, espaciados y consistencia entre pantallas.
+
+Evita diseños excesivamente simples, fondos planos sin personalidad, tarjetas idénticas sin jerarquía y elementos visuales innecesarios.
+
+## 3. PANTALLAS Y NAVEGACIÓN
+
+La aplicación debe tener las siguientes secciones:
+
+### A. INICIO
+
+Será la pantalla principal.
+
+Debe incluir:
+
+- Cabecera con logotipo, navegación y botón para cambiar entre modo claro y oscuro.
+- Un banner principal atractivo con una fotografía de Marruecos, un título llamativo y un texto de bienvenida.
+- Barra de búsqueda funcional para encontrar ciudades, actividades, restaurantes y alojamientos.
+- Filtros por categorías mediante botones:
+  - Todo
+  - Turismo
+  - Comida
+  - Deportes
+  - Riads
+- Sección de destinos destacados.
+- Cuadrícula de tarjetas con los diferentes lugares y experiencias.
+- Secciones adicionales para descubrir Marruecos, como gastronomía, compras y cultura.
+
+Los filtros deben funcionar realmente y mostrar únicamente las tarjetas correspondientes a la categoría seleccionada. La transición entre filtros debe ser suave.
+
+La búsqueda debe permitir encontrar tarjetas por título, ciudad o descripción.
+
+### B. CONTENIDO TURÍSTICO: CIUDADES Y DESTINOS
+
+Incluye como mínimo estos cuatro destinos:
+
+1. Marrakech: plaza Jemaa el-Fna, medina, jardines y monumentos.
+2. Chefchaouen: la famosa ciudad azul, sus calles y miradores.
+3. Fez: medina histórica, curtidores y arquitectura tradicional.
+4. Merzouga: desierto del Sáhara, dunas de Erg Chebbi y excursiones.
+
+Cada tarjeta debe tener:
+- Fotografía representativa.
+- Nombre del destino.
+- Ciudad o región.
+- Descripción breve y atractiva.
+- Etiqueta de duración, por ejemplo «Ruta 3 días», «Escapada» o «Experiencia».
+- Precio orientativo cuando corresponda.
+- Botón para acceder a los detalles.
+- Icono para añadir a favoritos.
+
+### C. GASTRONOMÍA MARROQUÍ
+
+Incluye al menos cuatro tarjetas con platos y experiencias gastronómicas reales, por ejemplo:
+
+- Tajín.
+- Cuscús.
+- Pastela.
+- Té moruno y dulces tradicionales.
+
+Cada tarjeta debe incluir fotografía, descripción, ingredientes o características principales y precio orientativo en dirhams.
+
+### D. DEPORTES Y AVENTURAS
+
+Incluye al menos cuatro experiencias reales:
+
+- Excursión en quad por el desierto de Agafay.
+- Paseo en camello por las dunas de Merzouga.
+- Senderismo y trekking en el monte Toubkal.
+- Surf en Taghazout.
+
+Cada tarjeta debe tener fotografía, descripción, ubicación, duración aproximada y precio orientativo.
+
+### E. RIADS Y ALOJAMIENTOS
+
+Incluye al menos cuatro riads tradicionales reales de Marruecos.
+
+Cada tarjeta debe mostrar:
+- Fotografía del alojamiento.
+- Nombre del riad.
+- Ciudad y barrio.
+- Valoración mediante estrellas.
+- Precio aproximado por noche en euros o dirhams.
+- Breve descripción.
+- Botón para consultar detalles.
+
+Utiliza alojamientos reconocibles y datos razonables. Las valoraciones y los precios deben ser orientativos si no se pueden verificar. No presentes estimaciones como tarifas actuales garantizadas.
+
+### F. ZOCOS Y COMPRAS
+
+Crea una sección dedicada a las compras tradicionales de Marruecos.
+
+Incluye tarjetas visuales de productos como:
+
+- Especias.
+- Alfombras bereberes.
+- Artículos de cuero.
+- Cerámica y productos artesanales.
+
+Cada tarjeta debe incluir fotografía, descripción y precio aproximado en MAD.
+
+Añade también un pequeño **conversor de divisas MAD a EUR**:
+
+- Campo para introducir una cantidad en dirhams.
+- Resultado convertido a euros.
+- Conversión automática al modificar la cantidad.
+- Botón para intercambiar las divisas si resulta conveniente.
+- Indicación de que el tipo de cambio utilizado es orientativo.
+
+El conversor debe funcionar mediante JavaScript, no ser simplemente decorativo.
+
+### G. FRASES ÚTILES EN DARIJA
+
+Añade una sección interactiva para aprender expresiones básicas de Marruecos.
+
+Incluye al menos estas palabras:
+
+- Salam: Hola.
+- Shukran: Gracias.
+- Afak: Por favor.
+- Bslama: Adiós.
+- La: No.
+- Naam: Sí.
+
+Las expresiones deben aparecer en tarjetas que **giren al pulsarlas**.
+
+En la parte frontal aparecerá la palabra en darija y, al girarla, su traducción y una pronunciación aproximada.
+
+Añade una animación de giro suave y un diseño visual atractivo.
+
+### H. VISTA DE DETALLES
+
+Cuando el usuario pulse cualquier tarjeta de turismo, comida, deportes o riads, debe abrirse una pantalla de detalle.
+
+Esta pantalla debe mostrar:
+
+- Fotografía principal de gran tamaño.
+- Nombre del lugar o experiencia.
+- Ubicación.
+- Descripción más completa.
+- Horario o información de disponibilidad cuando corresponda.
+- Precio orientativo.
+- Información adicional útil para el viajero.
+- Botón para añadir o quitar de favoritos.
+- Botón para volver a la pantalla anterior.
+
+Los detalles deben cambiar según la tarjeta seleccionada. No quiero que todas las tarjetas abran una misma pantalla genérica con información repetida.
+
+### I. MI RUTA / FAVORITOS
+
+Crea una pantalla independiente llamada «Mi Ruta».
+
+En ella aparecerán todos los lugares, alojamientos, restaurantes y actividades que el usuario haya guardado como favoritos.
+
+Debe permitir:
+
+- Visualizar las tarjetas favoritas.
+- Abrir sus respectivas pantallas de detalle.
+- Eliminar elementos de favoritos.
+- Mostrar un mensaje atractivo cuando todavía no haya favoritos.
+- Mantener los favoritos guardados aunque se cierre o actualice el navegador.
+
+Para conseguirlo, utiliza **localStorage**.
+
+### J. MODO CLARO Y OSCURO
+
+Incluye un interruptor funcional para cambiar entre ambos modos.
+
+Modo claro:
+- Fondo arena o crema.
+- Tarjetas blancas.
+- Acentos terracota.
+- Texto oscuro.
+
+Modo oscuro:
+- Fondo azul noche o petróleo.
+- Tarjetas azul oscuro.
+- Detalles dorados.
+- Texto claro.
+
+El cambio debe afectar a toda la interfaz, incluidos los elementos secundarios, botones, tarjetas, menús y pantallas de detalle.
+
+Guarda la preferencia en localStorage para mantener el tema seleccionado al volver a entrar.
+
+## 4. DISEÑO RESPONSIVE Y MULTIPLATAFORMA
+
+La aplicación debe adaptarse perfectamente a móviles, tablets y ordenadores.
+
+No quiero simplemente que la web se reduzca de tamaño: quiero que reorganice sus elementos según el dispositivo.
+
+**Móvil:**
+- Menú de navegación fijo en la parte inferior.
+- Iconos y nombres de las secciones.
+- Filtros desplazables horizontalmente.
+- Tarjetas en una sola columna.
+- Imágenes bien proporcionadas.
+- Botones cómodos de pulsar.
+- Barra de búsqueda adaptada al ancho disponible.
+- Ningún elemento debe provocar desplazamiento horizontal de toda la página.
+
+**Tablet:**
+- Tarjetas distribuidas en dos columnas.
+- Cabecera más amplia.
+- Navegación adaptada al espacio disponible.
+- Aprovechamiento del espacio sin perder legibilidad.
+
+**Ordenador:**
+- Barra de navegación superior o menú lateral.
+- Banner principal amplio.
+- Cuadrícula de tres o cuatro columnas de tarjetas.
+- Mayor aprovechamiento del espacio horizontal.
+- Diseño equilibrado, elegante y con buena jerarquía visual.
+
+Utiliza media queries o las clases responsive de Tailwind CSS para conseguirlo.
+
+## 5. CONTENIDO REAL Y COMPLETO: PROHIBIDOS LOS PLACEHOLDERS
+
+Esta parte es especialmente importante.
+
+Quiero que la aplicación tenga **entre 12 y 16 tarjetas como mínimo, preferiblemente 16**, distribuidas de forma equilibrada:
+
+- 4 tarjetas de turismo.
+- 4 tarjetas de gastronomía.
+- 4 tarjetas de deportes y aventuras.
+- 4 tarjetas de riads.
+
+Todas deben tener contenido propio, nombres reales, descripciones específicas y fotografías relacionadas con el contenido.
+
+No utilices:
+- Lorem ipsum.
+- Textos genéricos.
+- Tarjetas duplicadas.
+- Imágenes aleatorias que no correspondan al lugar.
+- Botones que no hagan nada.
+- Secciones vacías.
+- Textos como «Contenido próximamente».
+- Datos inventados presentados como información verificada.
+
+Utiliza fotografías funcionales mediante URLs directas de imágenes de Unsplash, preferiblemente de imágenes alojadas en `images.unsplash.com`.
+
+Comprueba que las URL tengan un formato correcto, utiliza diferentes fotografías y configura imágenes alternativas o fondos de respaldo en caso de error de carga.
+
+Los precios deben ser orientativos y estar identificados como tales. No inventes horarios exactos ni valoraciones supuestamente verificadas.
+
+## 6. REQUISITOS TÉCNICOS
+
+Quiero que toda la aplicación esté desarrollada en **un único archivo HTML autocontenido**, incluyendo:
+
+- Estructura HTML.
+- Tailwind CSS.
+- CSS adicional dentro de una etiqueta `&lt;style&gt;` cuando sea necesario.
+- Todo el JavaScript dentro de etiquetas `&lt;script&gt;`.
+
+Requisitos:
+
+1. Utiliza Tailwind CSS mediante su CDN para poder ejecutar directamente el archivo HTML sin necesidad de instalar dependencias.
+2. No utilices React, Vue, Angular ni frameworks que requieran compilación.
+3. No dividas el proyecto en varios archivos.
+4. No utilices rutas externas para archivos propios de CSS o JavaScript.
+5. Implementa la navegación entre pantallas mediante JavaScript.
+6. Implementa los filtros y la búsqueda.
+7. Implementa el guardado y eliminación de favoritos con localStorage.
+8. Implementa el modo claro y oscuro con persistencia.
+9. Implementa el conversor de divisas.
+10. Implementa las tarjetas giratorias de frases en darija.
+11. Implementa las transiciones y animaciones.
+12. Asegúrate de que los botones y controles sean realmente funcionales.
+
+Puedes utilizar iconos SVG integrados directamente en el HTML para evitar dependencias adicionales.
+
+Organiza el JavaScript de forma clara, con funciones independientes y nombres descriptivos. Evita duplicar código innecesariamente.
+
+## 7. CALIDAD, DETALLES Y ACABADO
+
+Antes de terminar, revisa mentalmente toda la aplicación y asegúrate de que:
+
+- Todas las secciones son accesibles desde la navegación.
+- Los filtros funcionan correctamente.
+- La búsqueda devuelve resultados.
+- Las tarjetas abren sus propios detalles.
+- Los favoritos se guardan correctamente.
+- El tema claro y oscuro funciona en todas las pantallas.
+- El conversor calcula correctamente.
+- Las tarjetas de darija giran al pulsarlas.
+- El diseño se adapta a móvil, tablet y PC.
+- No existen botones decorativos sin funcionalidad.
+- No hay errores evidentes en JavaScript.
+- No se producen desbordamientos horizontales.
+- Las imágenes tienen textos alternativos.
+- Los estados vacíos y los mensajes de interacción están bien diseñados.
+
+Prioriza tanto la calidad visual como la funcionalidad. El resultado debe parecer una aplicación real que podría utilizar un viajero.
+
+## 8. INSTRUCCIÓN FUNDAMENTAL: NO RESUMAS NI RECORTES EL CÓDIGO
+
+**QUIERO EL CÓDIGO COMPLETO, NO UNA EXPLICACIÓN DE CÓMO HACERLO.**
+
+Esta instrucción es obligatoria:
+
+- No resumas el código.
+- No omitas ninguna sección.
+- No sustituyas partes por comentarios como `// resto del código`.
+- No utilices puntos suspensivos para representar código que falta.
+- No entregues pseudocódigo.
+- No simplifiques funcionalidades para reducir la longitud.
+- No dejes funciones sin implementar.
+- No entregues solamente una demostración visual.
+- No reduzcas el número de tarjetas.
+- No elimines funcionalidades por falta de espacio.
+
+Entrega el archivo HTML completo, desde `&lt;!DOCTYPE html&gt;` hasta `&lt;/html&gt;`, dentro de un único bloque de código HTML, listo para copiar, guardar como `index.html` y abrir directamente en un navegador.
+
+**Si el código es demasiado largo para una sola respuesta, divídelo en varias partes consecutivas.** En ese caso, indica claramente dónde termina cada parte y continúa exactamente desde la última línea de la anterior, sin repetir código, sin saltarte ninguna sección y sin resumir absolutamente nada.
+
+No empieces explicando lo que vas a hacer ni me des una lista de recomendaciones. Empieza directamente entregando el código completo de la aplicación.
+
+El resultado final debe ser una aplicación web funcional, visualmente excelente, responsive y con todas las características solicitadas.</pre>
+          </details>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/05-claude-construccion.png">
+            <img src="capturas/05-claude-construccion.png" alt="Captura de Claude construyendo la web con la vista previa del resultado" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Falta la captura</b>Guárdala en:<br><code>capturas/05-claude-construccion.png</code></span>
+          </button>
+          <figcaption>Claude · creación de Marruecos Explorer</figcaption>
+        </figure>
+      </article>
+
+      <!-- 6 · CHATGPT · imagen Chefchaouen -->
+      <article class="step chatgpt" data-ai="chatgpt">
+        <div>
+          <div class="step-head"><span class="num">6</span><span class="badge">ChatGPT</span></div>
+          <h3>Cambiar la foto de Chefchaouen</h3>
+          <p class="goal">La imagen de Chefchaouen no me convencía. Le pasé a ChatGPT el código de la web como texto pegado y le pedí cambiar solo esa foto por la de una página de Tripadvisor.</p>
+          <div class="label"><span>Prompt usado</span><button class="copy" type="button">Copiar</button></div>
+          <div class="prompt">tengo la web que he puesto, no quiero que cambies NADA de la web solo qiero que la imagen en la que dice chefchaouen se ponga la de esta web :https://www.tripadvisor.es/Attraction_Review-g304013-d1751665-Reviews-Chefchaouen_Medina-Chefchaouen_Tanger_Tetouan_Al_Hoceima.html
+esta es la web;</div>
+          <p class="note">Adjunté el código en «Texto pegado.txt». ChatGPT localizó la imagen dentro del elemento <b>id: 'chefchaouen'</b> del apartado <b>ITEMS</b> y mantuvo todo lo demás igual.</p>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/06-chatgpt-imagen-chefchaouen.png">
+            <img src="capturas/06-chatgpt-imagen-chefchaouen.png" alt="Captura de ChatGPT cambiando la imagen de Chefchaouen en el código" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Falta la captura</b>Guárdala en:<br><code>capturas/06-chatgpt-imagen-chefchaouen.png</code></span>
+          </button>
+          <figcaption>ChatGPT · chat «Cambiar imagen Chefchaouen»</figcaption>
+        </figure>
+      </article>
+
+      <!-- 7 · CLAUDE · colores -->
+      <article class="step claude" data-ai="claude">
+        <div>
+          <div class="step-head"><span class="num">7</span><span class="badge">Claude</span></div>
+          <h3>Colores inspirados en la bandera</h3>
+          <p class="goal">Con la web ya modificada, volví a Claude para cambiar únicamente los colores de los dos temas, acercándolos a la bandera de Marruecos sin que resultaran chillones.</p>
+          <div class="label"><span>Prompt usado</span><button class="copy" type="button">Copiar</button></div>
+          <div class="prompt">perfecto he hecho una pequeña modificación ahora el archivo es el adjuntado, ahora me gustaria que solo cambies los colores de los temas un poco me gustaría que tuvieran algo que ver con la bandera de marruecos (los colores) pero sin que quede feo</div>
+          <p class="note">Resultado: rojo bandera (#c1272d) como acento y verde bandera (#006233) como secundario en el modo claro. El modo oscuro pasó de azul noche a verde muy oscuro con un rojo más luminoso.</p>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/07-claude-colores.png">
+            <img src="capturas/07-claude-colores.png" alt="Captura de Claude aplicando los colores de la bandera de Marruecos" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Falta la captura</b>Guárdala en:<br><code>capturas/07-claude-colores.png</code></span>
+          </button>
+          <figcaption>Claude · chat «Colores de temas estilo Marruecos»</figcaption>
+        </figure>
+      </article>
+
+      <!-- 8 · CLAUDE · esta página -->
+      <article class="step claude" data-ai="claude">
+        <div>
+          <div class="step-head"><span class="num">8</span><span class="badge">Claude</span></div>
+          <h3>Documentar el proceso (esta página)</h3>
+          <p class="goal">Por último, le pedí a Claude esta página para reunir las capturas y los prompts de todas las IAs. La captura de este chat se añadirá al terminar.</p>
+          <div class="label"><span>Prompt usado</span><button class="copy" type="button">Copiar</button></div>
+          <div class="prompt">ahora quiero que me hagas otra web llamada proceso html que tendrá las capturas y prompts usados con todas las IAs te mand las capturas para que lo hagas y tambien pondré la de este chat</div>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/08-claude-proceso.png">
+            <img src="capturas/08-claude-proceso.png" alt="Captura de Claude creando la página de proceso" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Pendiente de añadir</b>Captura de este chat:<br><code>capturas/08-claude-proceso.png</code></span>
+          </button>
+          <figcaption>Claude · creación de proceso.html</figcaption>
+        </figure>
+      </article>
+
+      <!-- 9 · STITCH AI · pendiente -->
+      <article class="step stitch" data-ai="stitch">
+        <div>
+          <div class="step-head"><span class="num">9</span><span class="badge pending">Stitch AI · pendiente</span></div>
+          <h3>Diseño de pantallas con Stitch AI</h3>
+          <p class="goal">Stitch AI estaba prevista como una de las herramientas del trabajo. Cuando tengas sus capturas y prompts, añádelos en este bloque.</p>
+          <p class="note">Para completarlo: sustituye este texto por el prompt usado y guarda la captura como <b>capturas/09-stitch-ai.png</b>.</p>
+        </div>
+        <figure>
+          <button class="shot" type="button" data-src="capturas/09-stitch-ai.png">
+            <img src="capturas/09-stitch-ai.png" alt="Captura de Stitch AI con el diseño de pantallas" loading="lazy">
+            <span class="zoom">Ampliar</span>
+            <span class="ph"><b>Pendiente de añadir</b>Captura de Stitch AI:<br><code>capturas/09-stitch-ai.png</code></span>
+          </button>
+          <figcaption>Stitch AI · diseño de pantallas</figcaption>
+        </figure>
+      </article>
+    </div>
+
+    <div id="empty" class="empty hidden">No hay pasos para este filtro.</div>
+  </section>
+
+  <section class="block" id="conclusiones">
+    <div class="block-head">
+      <p class="eyebrow">Reflexión</p>
+      <h2>Qué aprendí del proceso</h2>
+    </div>
+    <div class="learn-grid">
+      <article class="learn">
+        <div class="ico">✍️</div>
+        <h3>Un buen prompt marca la diferencia</h3>
+        <p>Cuanto más concretos eran los requisitos (secciones, número de tarjetas, funciones), más completo fue el resultado.</p>
+      </article>
+      <article class="learn">
+        <div class="ico">🤝</div>
+        <h3>Cada IA, una tarea</h3>
+        <p>Usar unas IAs para preparar prompts y otra para construir la web ahorró tiempo y mejoró la calidad.</p>
+      </article>
+      <article class="learn">
+        <div class="ico">🔁</div>
+        <h3>Iterar con cambios pequeños</h3>
+        <p>Pedir ajustes concretos, como una foto o la paleta de colores, permitió mejorar la web sin rehacerla.</p>
+      </article>
+    </div>
+  </section>
+
+  <footer>
+    <b>Marruecos Explorer</b>
+    <p style="margin-top:6px">Proyecto académico de Desarrollo de Interfaces · Documentación del proceso con IA.</p>
+  </footer>
+</main>
+
+<div class="lightbox" id="lightbox" role="dialog" aria-modal="true" aria-label="Captura ampliada">
+  <button class="close" id="lb-close" aria-label="Cerrar">✕</button>
+  <img id="lb-img" src="" alt="">
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+<script>
+/* ===== Tema (comparte la clave con la app principal) ===== */
+function applyTheme(theme) {
+  var dark = theme === 'dark';
+  document.documentElement.classList.toggle('dark', dark);
+  document.getElementById('icon-moon').classList.toggle('hidden', dark);
+  document.getElementById('icon-sun').classList.toggle('hidden', !dark);
+}
+function initTheme() {
+  var saved = null;
+  try { saved = localStorage.getItem('marruecos_theme'); } catch (e) {}
+  if (!saved) saved = (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) ? 'dark' : 'light';
+  applyTheme(saved);
+}
+function toggleTheme() {
+  var next = document.documentElement.classList.contains('dark') ? 'light' : 'dark';
+  applyTheme(next);
+  try { localStorage.setItem('marruecos_theme', next); } catch (e) {}
+}
+
+/* ===== Utilidades ===== */
+function showToast(msg) {
+  var t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  clearTimeout(showToast.timer);
+  showToast.timer = setTimeout(function () { t.classList.remove('show'); }, 1800);
+}
+
+/* ===== Contadores ===== */
+function updateCounts() {
+  var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
+  document.getElementById('stat-steps').textContent = steps.filter(function (s) { return s.getAttribute('data-ai') !== 'stitch'; }).length;
+  ['gemini', 'chatgpt', 'claude', 'stitch'].forEach(function (ai) {
+    var n = steps.filter(function (s) { return s.getAttribute('data-ai') === ai; }).length;
+    var el = document.querySelector('[data-count="' + ai + '"]');
+    if (!el) return;
+    if (ai === 'stitch') el.textContent = 'Pendiente';
+    else el.textContent = n + (n === 1 ? ' paso' : ' pasos');
+  });
+}
+
+/* ===== Filtros ===== */
+function setFilter(ai) {
+  document.querySelectorAll('#filters .chip').forEach(function (c) {
+    var on = c.getAttribute('data-filter') === ai;
+    c.classList.toggle('active', on);
+    c.setAttribute('aria-selected', on ? 'true' : 'false');
+  });
+  var visible = 0;
+  document.querySelectorAll('.step').forEach(function (s) {
+    var show = ai === 'all' || s.getAttribute('data-ai') === ai;
+    s.classList.toggle('out', !show);
+    if (show) { visible++; s.style.animation = 'none'; void s.offsetWidth; s.style.animation = ''; }
+  });
+  document.getElementById('empty').classList.toggle('hidden', visible > 0);
+}
+
+/* ===== Copiar prompts ===== */
+function copyText(text, btn) {
+  var done = function () {
+    var old = btn.textContent;
+    btn.textContent = '¡Copiado!';
+    btn.classList.add('done');
+    showToast('Prompt copiado');
+    setTimeout(function () { btn.textContent = old; btn.classList.remove('done'); }, 1500);
+  };
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done, function () { fallbackCopy(text); done(); });
+  } else {
+    fallbackCopy(text); done();
+  }
+}
+function fallbackCopy(text) {
+  var ta = document.createElement('textarea');
+  ta.value = text; ta.style.position = 'fixed'; ta.style.opacity = '0';
+  document.body.appendChild(ta); ta.select();
+  try { document.execCommand('copy'); } catch (e) {}
+  document.body.removeChild(ta);
+}
+
+/* ===== Capturas y lightbox ===== */
+function markMissing(img) { img.closest('.shot').classList.add('missing'); }
+function openLightbox(src) {
+  document.getElementById('lb-img').src = src;
+  document.getElementById('lightbox').classList.add('open');
+}
+function closeLightbox() { document.getElementById('lightbox').classList.remove('open'); }
+
+function bindEvents() {
+  document.getElementById('theme-toggle').addEventListener('click', toggleTheme);
+
+  document.getElementById('filters').addEventListener('click', function (e) {
+    var chip = e.target.closest('.chip');
+    if (chip) setFilter(chip.getAttribute('data-filter'));
+  });
+
+  document.getElementById('timeline').addEventListener('click', function (e) {
+    var copy = e.target.closest('.copy');
+    if (copy) {
+      var targetId = copy.getAttribute('data-target');
+      var source = targetId ? document.getElementById(targetId) : copy.closest('.label').nextElementSibling;
+      copyText(source.textContent.trim(), copy);
+      return;
+    }
+    var shot = e.target.closest('.shot');
+    if (shot && !shot.classList.contains('missing')) openLightbox(shot.getAttribute('data-src'));
+  });
+
+  document.querySelectorAll('.shot img').forEach(function (img) {
+    img.addEventListener('error', function () { markMissing(img); });
+    if (img.complete && img.naturalWidth === 0) markMissing(img);
+  });
+
+  document.getElementById('lb-close').addEventListener('click', closeLightbox);
+  document.getElementById('lightbox').addEventListener('click', function (e) {
+    if (e.target.id === 'lightbox') closeLightbox();
+  });
+  document.addEventListener('keydown', function (e) { if (e.key === 'Escape') closeLightbox(); });
+}
+
+document.addEventListener('DOMContentLoaded', function () {
+  initTheme();
+  updateCounts();
+  bindEvents();
+});
+</script>
+</body>
+</html>
