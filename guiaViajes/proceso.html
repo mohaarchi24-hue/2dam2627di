@@ -377,17 +377,28 @@ lo haré usando diferentes IAs como chatgpt, claude, stitch ai y gemini</div>
           <p class="goal">Con la lista de Gemini, pedí a ChatGPT que escribiera un buen prompt para que Claude construyera la guía de viajes.</p>
           <div class="label"><span>Prompt usado (extracto visible)</span><button class="copy" type="button">Copiar</button></div>
           <div class="prompt">dame un buen prompt para hacer una pagina web en claude sobre una guia de viajes a marruecos estas son algunas de las cosas que quiero que tenga :
+
 1. Contenido extra sobre Marruecos (para dar variedad a las cards)
-
-• Ciudades clave: Marrakech, Chefchaouen, Fez y Desierto de Merzouga, con etiquetas de tiempo ("Ruta 3 días", "Escapada").
-• Riads tradicionales: Alojamientos con foto, estrellas, precio por noche y barrio.
-• Zocos y compras: Productos típicos (especias, alfombras, cuero) junto a un mini-conversor rápido de Dirhams (MAD) a Euros.
-• Frases útiles: Tarjetas que giran al tocarlas con palabras básicas en darija (Salam, Shukran).
-
+- Ciudades clave: Marrakech, Chefchaouen, Fez y Desierto de Merzouga, con etiquetas de tiempo ("Ruta 3 días", "Escapada").
+- Riads tradicionales: Alojamientos con foto, estrellas, precio por noche y barrio.
+- Zocos y compras: Productos típicos (especias, alfombras, cuero) junto a un mini-conversor rápido de Dirhams (MAD) a Euros.
+- Frases útiles: Tarjetas que giran al tocarlas con palabras básicas en darija (Salam, Shukran).
 2. Funciones y pantallas
+- Filtros en la portada: Barra de búsqueda y botones (Todo, Turismo, Comida, Deportes, Riads) que filtren las cards con una transición suave.
+- Vista de detalle: Al pulsar una card, se abre su pantalla con descripción, horario, precio y botón de favorito.
+- Mi Ruta: Pantalla donde se guardan los sitios marcados como favoritos.
+- Modo Claro y Oscuro: Claro con fondo arena y acentos terracota; oscuro con fondo azul noche y detalles dorados.
+3. Página principal multiplataforma y responsive
 
-• Filtros en la portada: Barra de búsqueda y botones (Todo, Turismo, Comida, Deportes, Riads) que filtren las cards con una transición suave.
-…</div>
+Como se ve en la estructura de las tres pantallas, pídele que la portada reorganice sus bloques según el tamaño del dispositivo:
+- En móvil: Menú fijo en la parte inferior, filtros deslizables hacia los lados y cards en 1 columna.
+- En tablet: Cards repartidas en 2 columnas y cabecera más ancha.
+- En ordenador (PC): Barra de navegación superior o menú lateral, banner principal grande y cuadrícula de 3 o 4 columnas de cards.
+Cero datos de relleno (placeholders): Exige que cree al menos 12 a 16 tarjetas reales repartidas entre turismo, gastronomía, deportes y riads, con textos reales sobre Marruecos, precios y fotos funcionales (por ejemplo, usando URLs de Unsplash), evitando textos tipo "Lorem ipsum".  
+
+Todo en un único archivo autocontenido (HTML + Tailwind CSS + JavaScript): Al pedirle todo en un solo archivo, te aseguras de que el botón de modo claro/oscuro, los filtros, las transiciones entre pantallas y el guardado de favoritos en Mi Ruta funcionen al instante sin errores de rutas ni librerías rotas.  
+
+y pidele que no resuma el codigo</div>
           <p class="note">El chat se llamó «Prompt web Marruecos Completo». El resultado fue el prompt largo del paso siguiente.</p>
         </div>
         <figure>
