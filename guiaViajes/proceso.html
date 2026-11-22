@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Proceso · Marruecos Explorer</title>
-<meta name="description" content="Documentación del proceso de creación de Marruecos Explorer: capturas y prompts usados con Gemini, ChatGPT, Claude y Stitch AI.">
+<meta name="description" content="Documentación del proceso de creación de Marruecos Explorer: capturas y prompts usados con Gemini, ChatGPT y Claude.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:wght@600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -252,7 +252,7 @@
     <p class="lead">Capturas y prompts de todo el proceso: de la portada del trabajo al prompt final de la web, pasando por los ajustes de imagen y de color.</p>
     <div class="stats">
       <div class="stat"><b id="stat-steps">0</b><span>pasos documentados</span></div>
-      <div class="stat"><b>4</b><span>IAs utilizadas</span></div>
+      <div class="stat"><b>3</b><span>IAs utilizadas</span></div>
       <div class="stat"><b>1</b><span>archivo HTML final</span></div>
     </div>
   </div>
@@ -276,13 +276,8 @@
       </article>
       <article class="ia-card claude">
         <h3>Claude</h3>
-        <p class="role">Construir la web completa en un único HTML, ajustar los colores y crear esta página.</p>
+        <p class="role">Construir la web completa en un único HTML, ajustar los colores y crear esta página de proceso.</p>
         <p class="count" data-count="claude"></p>
-      </article>
-      <article class="ia-card stitch">
-        <h3>Stitch AI</h3>
-        <p class="role">Prevista para diseñar pantallas. Capturas pendientes de añadir.</p>
-        <p class="count" data-count="stitch"></p>
       </article>
     </div>
   </section>
@@ -299,7 +294,6 @@
       <button class="chip" data-filter="gemini" role="tab" aria-selected="false">Gemini</button>
       <button class="chip" data-filter="chatgpt" role="tab" aria-selected="false">ChatGPT</button>
       <button class="chip" data-filter="claude" role="tab" aria-selected="false">Claude</button>
-      <button class="chip" data-filter="stitch" role="tab" aria-selected="false">Stitch AI</button>
     </div>
 
     <div class="timeline" id="timeline">
@@ -837,23 +831,6 @@ esta es la web;</div>
         </figure>
       </article>
 
-      <!-- 9 · STITCH AI · pendiente -->
-      <article class="step stitch" data-ai="stitch">
-        <div>
-          <div class="step-head"><span class="num">9</span><span class="badge pending">Stitch AI · pendiente</span></div>
-          <h3>Diseño de pantallas con Stitch AI</h3>
-          <p class="goal">Stitch AI estaba prevista como una de las herramientas del trabajo. Cuando tengas sus capturas y prompts, añádelos en este bloque.</p>
-          <p class="note">Para completarlo: sustituye este texto por el prompt usado y guarda la captura como <b>capturas/09-stitch-ai.png</b>.</p>
-        </div>
-        <figure>
-          <button class="shot" type="button" data-src="capturas/09-stitch-ai.png">
-            <img src="capturas/09-stitch-ai.png" alt="Captura de Stitch AI con el diseño de pantallas" loading="lazy">
-            <span class="zoom">Ampliar</span>
-            <span class="ph"><b>Pendiente de añadir</b>Captura de Stitch AI:<br><code>capturas/09-stitch-ai.png</code></span>
-          </button>
-          <figcaption>Stitch AI · diseño de pantallas</figcaption>
-        </figure>
-      </article>
     </div>
 
     <div id="empty" class="empty hidden">No hay pasos para este filtro.</div>
@@ -927,13 +904,11 @@ function showToast(msg) {
 /* ===== Contadores ===== */
 function updateCounts() {
   var steps = Array.prototype.slice.call(document.querySelectorAll('.step'));
-  document.getElementById('stat-steps').textContent = steps.filter(function (s) { return s.getAttribute('data-ai') !== 'stitch'; }).length;
-  ['gemini', 'chatgpt', 'claude', 'stitch'].forEach(function (ai) {
+  document.getElementById('stat-steps').textContent = steps.length;
+  ['gemini', 'chatgpt', 'claude'].forEach(function (ai) {
     var n = steps.filter(function (s) { return s.getAttribute('data-ai') === ai; }).length;
     var el = document.querySelector('[data-count="' + ai + '"]');
-    if (!el) return;
-    if (ai === 'stitch') el.textContent = 'Pendiente';
-    else el.textContent = n + (n === 1 ? ' paso' : ' pasos');
+    if (el) el.textContent = n + (n === 1 ? ' paso' : ' pasos');
   });
 }
 
